@@ -10,7 +10,6 @@ public class ClienteController {
 
     @GetMapping
     public List<Cliente> listarClientes() {
-        // Exemplo de lista de usuários
         List<Cliente> usuarios = new ArrayList<>();
         usuarios.add(new Cliente(1L, "João", "joao@example.com"));
         usuarios.add(new Cliente(2L, "Maria", "maria@example.com"));
@@ -19,7 +18,6 @@ public class ClienteController {
 
     @PostMapping
     public Cliente criarCliente(@RequestBody Cliente usuario) {
-        // Lógica para salvar o usuário
         return usuario;
     }
 }

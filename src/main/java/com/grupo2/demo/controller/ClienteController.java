@@ -8,6 +8,9 @@ import com.grupo2.demo.model.Cliente;
 @RequestMapping("/api/cliente")
 public class ClienteController {
 
+    @Autowired
+    private UserRepository acao;
+
     @GetMapping
     public List<Cliente> listarClientes() {
         List<Cliente> usuarios = new ArrayList<>();
@@ -18,6 +21,6 @@ public class ClienteController {
 
     @PostMapping
     public Cliente criarCliente(@RequestBody Cliente usuario) {
-        return usuario;
+        return acao.save(usuario);
     }
 }

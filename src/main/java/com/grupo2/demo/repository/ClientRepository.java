@@ -6,5 +6,5 @@ import com.grupo2.demo.model.Client;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-	
+        public Client findByNome(String nome);
 }

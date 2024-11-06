@@ -1,57 +1,52 @@
 package com.grupo2.demo.model;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
-@Entity
+@MappedSuperclass
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(unique=true)
-    private String username;
+
+    @Column(length = 100, nullable = false)
+    private String nome;
+    @Column(length = 100, nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
     private String password;
+    @Column(nullable = false)
+    private boolean ativo;
 
-    public User() {
+    public User(){}
+
+    public String getNome() {
+        return nome;
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public Long getId() {
-        return id;
+    public String getEmail() {
+        return email;
     }
 
-    public String getUsername() {
-        return username;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
     }
 
 }

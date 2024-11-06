@@ -2,10 +2,10 @@ package com.grupo2.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.grupo2.demo", "com.drupo2.demo.controller"})	
+@EnableJpaRepositories(basePackages = {"com.grupo2.demo.repository"})
 public class PiazadaApplication {
 
     public static void main(String[] args) {

@@ -1,24 +1,39 @@
 package com.grupo2.demo.model;
 
-import javax.xml.crypto.Data;
+import java.time.LocalDate;
+
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Employee extends User {
 
-    private Data data_nascimento;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private LocalDate data_nascimento;
 
-    public Employee(Long id, String nome, String email, boolean ativo, Data data_nascimento) {
-        super(id, nome, email, ativo);
+    public Employee(String nome, String email, boolean ativo, LocalDate data_nascimento) {
+        super(nome, email, ativo);
         this.data_nascimento = data_nascimento;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     
-    public Data getData_nascimento() {
+    public LocalDate getData_nascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(Data data_nascimento) {
+    public void setData_nascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
 

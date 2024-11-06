@@ -1,7 +1,6 @@
 package com.grupo2.demo.model;
 
-import javax.xml.crypto.Data;
-
+import java.time.LocalDate;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,13 +14,13 @@ public class Fix {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private Data data_conserto;
+    private LocalDate data_conserto;
     @Column(nullable = false)
     private String descricao_conserto;
     @Column(nullable = false)
     private String orientacao_cliente;
 
-    public Fix(Data data_conserto, String descricao_conserto, String orientacao_cliente) {
+    public Fix(LocalDate data_conserto, String descricao_conserto, String orientacao_cliente) {
         this.data_conserto = data_conserto;
         this.descricao_conserto = descricao_conserto;
         this.orientacao_cliente = orientacao_cliente;
@@ -35,11 +34,11 @@ public class Fix {
         this.id = id;
     }
 
-    public Data getData_conserto() {
+    public LocalDate getData_conserto() {
         return data_conserto;
     }
 
-    public void setData_conserto(Data data_conserto) {
+    public void setData_conserto(LocalDate data_conserto) {
         this.data_conserto = data_conserto;
     }
 

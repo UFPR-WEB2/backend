@@ -6,6 +6,8 @@ import java.util.*;
 import com.grupo2.demo.model.Client;
 import com.grupo2.demo.repository.ClientRepository;
 
+
+// ADICIONEM METODOS REST PARA O CONTROLLER
 @RestController
 @RequestMapping("/api/cliente")
 public class ClientController {

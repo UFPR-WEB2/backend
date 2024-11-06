@@ -3,46 +3,46 @@ package com.grupo2.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.grupo2.demo.model.Employer;
-import com.grupo2.demo.repository.EmployerRepository;
+import com.grupo2.demo.model.Employee;
+import com.grupo2.demo.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/employers")
-public class EmployerController {
+public class EmployeeController {
 
     @Autowired
-    private EmployerRepository employerRepository;
+    private EmployeeRepository employerRepository;
 
     @GetMapping
-    public List<Employer> getAllEmployers() {
+    public List<Employee> getAllEmployers() {
         return employerRepository.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employer> getEmployerById(@PathVariable Long id) {
-        Optional<Employer> employer = employerRepository.findById(id);
+    public ResponseEntity<Employee> getEmployerById(@PathVariable Long id) {
+        Optional<Employee> employer = employerRepository.findById(id);
         return employer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Employer createEmployer(@RequestBody Employer employer) {
+    public Employee createEmployer(@RequestBody Employee employer) {
         return employerRepository.save(employer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employer> updateEmployer(@PathVariable Long id, @RequestBody Employer employerDetails) {
-        Optional<Employer> employerOptional = employerRepository.findById(id);
+    public ResponseEntity<Employee> updateEmployer(@PathVariable Long id, @RequestBody Employee employerDetails) {
+        Optional<Employee> employerOptional = employerRepository.findById(id);
 
         if (employerOptional.isPresent()) {
-            Employer employer = employerOptional.get();
+            Employee employer = employerOptional.get();
 
             employer.setNome(employerDetails.getNome());
             employer.setEmail(employerDetails.getEmail());
             employer.setAtivo(true);
 
-            Employer updatedEmployer = employerRepository.save(employer);
+            Employee updatedEmployer = employerRepository.save(employer);
             return ResponseEntity.ok(updatedEmployer);
         } else {
             return ResponseEntity.notFound().build();

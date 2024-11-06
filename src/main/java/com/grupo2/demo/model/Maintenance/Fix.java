@@ -1,4 +1,4 @@
-package com.grupo2.demo.model;
+package com.grupo2.demo.model.Maintenance;
 
 import java.time.LocalDate;
 import jakarta.persistence.Column;

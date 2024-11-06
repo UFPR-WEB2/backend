@@ -2,7 +2,7 @@ package com.grupo2.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.grupo2.demo.model.Fix;
+import com.grupo2.demo.model.Maintenance.Fix;
 
 @Repository
 public interface FixRepository extends JpaRepository<Fix, Long> {

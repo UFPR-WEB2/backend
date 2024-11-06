@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
-import com.grupo2.demo.model.Client;
+
+import com.grupo2.demo.model.User.Client;
 import com.grupo2.demo.repository.ClientRepository;
 
 @RestController

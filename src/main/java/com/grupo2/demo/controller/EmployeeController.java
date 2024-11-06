@@ -3,7 +3,8 @@ package com.grupo2.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.grupo2.demo.model.Employee;
+
+import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.EmployeeRepository;
 import java.util.List;
 import java.util.Optional;

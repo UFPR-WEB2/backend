@@ -15,9 +15,7 @@ public class Category {
     @Column(length = 50, nullable = false)
     private String nome_categoria;
 
-    public Category(String nome_categoria) {
-        this.nome_categoria = nome_categoria;
-    }
+    public Category() {}
 
     public Long getId() {
         return id;

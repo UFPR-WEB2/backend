@@ -12,9 +12,7 @@ public class Client extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Client(String nome, String email, boolean ativo) {
-        super(nome, email, ativo);
-    }
+    public Client() {}
 
     public Long getId() {
         return id;

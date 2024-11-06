@@ -16,10 +16,7 @@ public class Employee extends User {
     private Long id;
     private LocalDate data_nascimento;
 
-    public Employee(String nome, String email, boolean ativo, LocalDate data_nascimento) {
-        super(nome, email, ativo);
-        this.data_nascimento = data_nascimento;
-    }
+    public Employee() {}
 
     public Long getId() {
         return id;

@@ -20,11 +20,7 @@ public class Fix {
     @Column(nullable = false)
     private String orientacao_cliente;
 
-    public Fix(LocalDate data_conserto, String descricao_conserto, String orientacao_cliente) {
-        this.data_conserto = data_conserto;
-        this.descricao_conserto = descricao_conserto;
-        this.orientacao_cliente = orientacao_cliente;
-    }
+    public Fix() {}
 
     public Long getId() {
         return id;

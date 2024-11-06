@@ -1,7 +1,9 @@
 package com.grupo2.demo.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class User {
 
     @Column(length = 100, nullable = false)
@@ -12,12 +14,8 @@ public class User {
     private String password;
     @Column(nullable = false)
     private boolean ativo;
-    
-    public User(String nome, String email, boolean ativo) {
-        this.nome = nome;
-        this.email = email;
-        this.ativo = ativo;
-    }
+
+    public User(){}
 
     public String getNome() {
         return nome;

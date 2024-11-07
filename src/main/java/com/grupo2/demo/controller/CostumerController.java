@@ -5,43 +5,43 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
-import com.grupo2.demo.model.User.Client;
-import com.grupo2.demo.repository.ClientRepository;
+import com.grupo2.demo.model.User.Costumer;
+import com.grupo2.demo.repository.CostumerRepository;
 
 @RestController
 @RequestMapping("/api/cliente")
-public class ClientController {
+public class CostumerController {
 
     @Autowired
-    private ClientRepository clientRepository;
+    private CostumerRepository clientRepository;
 
     @GetMapping
-    public List<Client> listarClientes() {
+    public List<Costumer> listarClientes() {
         return clientRepository.findAll();
     }
 
     @PostMapping
-    public Client criarCliente(@RequestBody Client usuario) {
+    public Costumer criarCliente(@RequestBody Costumer usuario) {
         return clientRepository.save(usuario);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> obterClientePorId(@PathVariable Long id) {
-        Optional<Client> cliente = clientRepository.findById(id);
+    public ResponseEntity<Costumer> obterClientePorId(@PathVariable Long id) {
+        Optional<Costumer> cliente = clientRepository.findById(id);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> atualizarCliente(@PathVariable Long id, @RequestBody Client detalhesCliente) {
-        Optional<Client> clienteOptional = clientRepository.findById(id);
+    public ResponseEntity<Costumer> atualizarCliente(@PathVariable Long id, @RequestBody Costumer detalhesCliente) {
+        Optional<Costumer> clienteOptional = clientRepository.findById(id);
 
         if (clienteOptional.isPresent()) {
-            Client cliente = clienteOptional.get();
+            Costumer cliente = clienteOptional.get();
             cliente.setNome(detalhesCliente.getNome());
             cliente.setEmail(detalhesCliente.getEmail());
             cliente.setTelefone(detalhesCliente.getTelefone());
 
-            Client clienteAtualizado = clientRepository.save(cliente);
+            Costumer clienteAtualizado = clientRepository.save(cliente);
             return ResponseEntity.ok(clienteAtualizado);
         } else {
             return ResponseEntity.notFound().build();

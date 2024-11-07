@@ -14,8 +14,6 @@ public class User {
     private String password;
     @Column(nullable = false)
     private boolean ativo;
-    @Column(length = 20, nullable = false)
-    private String telefone;
 
     public User(){}
 
@@ -49,14 +47,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.grupo2.demo.model.Maintenance;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

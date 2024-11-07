@@ -1,10 +1,13 @@
 package com.grupo2.demo.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.grupo2.demo.model.Maintenance.Repair;
-import com.grupo2.demo.repository.RepairRepository;
+import com.grupo2.demo.model.Maintenance.Fix;
+import com.grupo2.demo.repository.FixRepository;
 import java.util.List;
 import java.util.Optional;
 

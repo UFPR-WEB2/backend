@@ -1,6 +1,7 @@
 package com.grupo2.demo.model.Maintenance;
 
 import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Fix {
+public class Repair {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +21,7 @@ public class Fix {
     @Column(nullable = false)
     private String orientacao_cliente;
 
-    public Fix() {}
+    public Repair() {}
 
     public Long getId() {
         return id;

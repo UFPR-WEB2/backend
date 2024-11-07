@@ -1,11 +1,20 @@
 package com.grupo2.demo.controller;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.grupo2.demo.model.User.Client;
+import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.ClientRepository;
 
 @RestController
@@ -16,32 +25,32 @@ public class ClientController {
     private ClientRepository clientRepository;
 
     @GetMapping
-    public List<Client> listarClientes() {
+    public List<Customer> listarClientes() {
         return clientRepository.findAll();
     }
 
     @PostMapping
-    public Client criarCliente(@RequestBody Client usuario) {
+    public Customer criarCliente(@RequestBody Customer usuario) {
         return clientRepository.save(usuario);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> obterClientePorId(@PathVariable Long id) {
-        Optional<Client> cliente = clientRepository.findById(id);
+    public ResponseEntity<Customer> obterClientePorId(@PathVariable Long id) {
+        Optional<Customer> cliente = clientRepository.findById(id);
         return cliente.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> atualizarCliente(@PathVariable Long id, @RequestBody Client detalhesCliente) {
-        Optional<Client> clienteOptional = clientRepository.findById(id);
+    public ResponseEntity<Customer> atualizarCliente(@PathVariable Long id, @RequestBody Customer detalhesCliente) {
+        Optional<Customer> clienteOptional = clientRepository.findById(id);
 
         if (clienteOptional.isPresent()) {
-            Client cliente = clienteOptional.get();
+            Customer cliente = clienteOptional.get();
             cliente.setNome(detalhesCliente.getNome());
             cliente.setEmail(detalhesCliente.getEmail());
             cliente.setTelefone(detalhesCliente.getTelefone());
 
-            Client clienteAtualizado = clientRepository.save(cliente);
+            Customer clienteAtualizado = clientRepository.save(cliente);
             return ResponseEntity.ok(clienteAtualizado);
         } else {
             return ResponseEntity.notFound().build();

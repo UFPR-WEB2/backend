@@ -3,9 +3,9 @@ package com.grupo2.demo.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.grupo2.demo.model.User.Client;
+import com.grupo2.demo.model.User.Customer;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
-        public Client findByNome(String nome);
+public interface ClientRepository extends JpaRepository<Customer, Long> {
+        public Customer findByNome(String nome);
 }

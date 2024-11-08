@@ -1,10 +1,10 @@
 package com.grupo2.demo.model.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Column;
 
 @Entity
 public class Costumer extends User {
@@ -12,23 +12,35 @@ public class Costumer extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String telefone;
-
+    
     @Column(length = 11, nullable = false)
     private String cpf;
-
+    
     @Column(length = 8, nullable = false)
     private String cep;
-
-    private String estado;
+    
+    @Column(length = 50, nullable = false)
     private String pais;
+    
+    @Column(length = 2, nullable = false)
+    private String estado;
+    
+    @Column(length = 50, nullable = false)
     private String cidade;
+    
+    @Column(length = 100, nullable = false)
     private String rua;
-    private String numero;
+    
+    @Column(nullable = false)
+    private int numero;
+    
+    @Column(length = 100, nullable = false)
     private String complemento;
+    
+    @Column(length = 20, nullable = false)
+    private String telefone;
 
-    public Costumer() {
-    }
+    public Costumer() {}
 
     public Long getId() {
         return id;
@@ -36,14 +48,6 @@ public class Costumer extends User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
     public String getCpf() {
@@ -62,20 +66,20 @@ public class Costumer extends User {
         this.cep = cep;
     }
 
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
     public String getPais() {
         return pais;
     }
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     public String getCidade() {
@@ -94,11 +98,11 @@ public class Costumer extends User {
         this.rua = rua;
     }
 
-    public String getNumero() {
+    public int getNumero() {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(int numero) {
         this.numero = numero;
     }
 
@@ -108,5 +112,13 @@ public class Costumer extends User {
 
     public void setComplemento(String complemento) {
         this.complemento = complemento;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

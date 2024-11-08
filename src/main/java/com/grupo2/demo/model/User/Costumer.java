@@ -32,7 +32,7 @@ public class Costumer extends User {
     private String rua;
     
     @Column(nullable = false)
-    private int numero;
+    private String numero;
     
     @Column(length = 100, nullable = false)
     private String complemento;
@@ -98,11 +98,11 @@ public class Costumer extends User {
         this.rua = rua;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo2.demo.model.User.Costumer;
 import com.grupo2.demo.repository.CostumerRepository;
+import com.grupo2.demo.service.CostumerService;
 
 @RestController
 @RequestMapping("/api/cliente")
@@ -24,8 +25,29 @@ public class CostumerController {
     @Autowired
     private CostumerRepository clientRepository;
 
+    @Autowired
+    private CostumerService clientService;
+
     @GetMapping
     public List<Costumer> listarClientes() {
+        int clientCount = clientRepository.findAll().size();
+        if(clientCount == 0) {
+            Costumer cliente = new Costumer();
+            cliente.setNome("João");
+            cliente.setEmail("Joao@gmail.com");
+            cliente.setTelefone("123456789");
+            cliente.setCpf("12345678901");
+            cliente.setCep("12345678");
+            cliente.setEstado("SP");
+            cliente.setPais("Brasil");
+            cliente.setCidade("São Paulo");
+            cliente.setRua("Rua 1");
+            cliente.setNumero("123");
+            cliente.setComplemento("Casa");
+            cliente.setPassword("1233");
+
+            clientService.costumerCreate(cliente);
+        }
         return clientRepository.findAll();
     }
 

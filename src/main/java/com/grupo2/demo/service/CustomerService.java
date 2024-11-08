@@ -28,6 +28,8 @@ public class CustomerService {
 
         Customer customer = usuario.toCustomer();
 
+        customer.setAtivo(true);
+
         return customerRepository.save(customer);
     }
 

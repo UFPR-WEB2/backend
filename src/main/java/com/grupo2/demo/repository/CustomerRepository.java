@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.grupo2.demo.model.User.Customer;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Customer, Long> {
-        public Customer findByNome(String nome);
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    public Customer findByNome(String nome);
 }

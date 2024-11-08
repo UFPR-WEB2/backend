@@ -1,53 +1,60 @@
-package com.grupo2.demo.model.User;
+package com.grupo2.demo.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.grupo2.demo.model.User.Customer;
 
-@Entity
-public class Customer extends User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    @Column(length = 11, nullable = false)
+public class CustomerRequest {
+    private String nome;
+    private String email;
+    private String password;
     private String cpf;
-    
-    @Column(length = 8, nullable = false)
     private String cep;
-    
-    @Column(length = 50, nullable = false)
     private String pais;
-    
-    @Column(length = 2, nullable = false)
     private String estado;
-    
-    @Column(length = 50, nullable = false)
     private String cidade;
-    
-    @Column(length = 100, nullable = false)
     private String rua;
-    
-    @Column(nullable = false)
     private String numero;
-    
-    @Column(length = 100, nullable = false)
     private String complemento;
-    
-    @Column(length = 20, nullable = false)
     private String telefone;
 
-    public Customer() {}
-
-    public Long getId() {
-        return id;
+    public Customer toCustomer() {
+        Customer user = new Customer();
+        user.setNome(this.nome);
+        user.setEmail(this.email);
+        user.setPassword(this.password);
+        user.setCpf(this.cpf);
+        user.setCep(this.cep);
+        user.setPais(this.pais);
+        user.setEstado(this.estado);
+        user.setCidade(this.cidade);
+        user.setRua(this.rua);
+        user.setNumero(this.numero);
+        user.setComplemento(this.complemento);
+        user.setTelefone(this.telefone);
+        return user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getCpf() {

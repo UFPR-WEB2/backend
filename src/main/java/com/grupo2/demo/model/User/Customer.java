@@ -7,7 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Costumer extends User {
+public class Customer extends User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class Costumer extends User {
     @Column(length = 20, nullable = false)
     private String telefone;
 
-    public Costumer() {}
+    public Customer() {}
 
     public Long getId() {
         return id;

@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.CustomerRequest;
-import com.grupo2.demo.model.User.Costumer;
-import com.grupo2.demo.repository.CostumerRepository;
+import com.grupo2.demo.model.User.Customer;
+import com.grupo2.demo.repository.CustomerRepository;
 
 @Service
-public class CostumerService {
+public class CustomerService {
 
     @Autowired
-    private CostumerRepository costumerRepository;
+    private CustomerRepository customerRepository;
 
     private boolean validatePassword(String password) {
         if (!password.matches("\\d+")) {
@@ -20,17 +20,15 @@ public class CostumerService {
         return password.length() >= 4;
     }
 
-    public Costumer costumerCreate(CustomerRequest usuario) {
+    public Customer customerCreate(CustomerRequest usuario) {
 
         if (!validatePassword(usuario.getPassword())) {
             throw new IllegalArgumentException("Senha inválida");
         }
 
-        Costumer costumer = usuario.toCustomer();
+        Customer customer = usuario.toCustomer();
 
-        // add: conversão para Costumer
-
-        return costumerRepository.save(usuario);
+        return customerRepository.save(customer);
     }
 
 }

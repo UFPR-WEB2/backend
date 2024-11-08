@@ -1,6 +1,6 @@
 package com.grupo2.demo.dto;
 
-import com.grupo2.demo.model.User.Costumer;
+import com.grupo2.demo.model.User.Customer;
 
 public class CustomerRequest {
     private String nome;
@@ -16,8 +16,8 @@ public class CustomerRequest {
     private String complemento;
     private String telefone;
 
-    public Costumer toCustomer() {
-        Costumer user = new Costumer();
+    public Customer toCustomer() {
+        Customer user = new Customer();
         user.setNome(this.nome);
         user.setEmail(this.email);
         user.setPassword(this.password);

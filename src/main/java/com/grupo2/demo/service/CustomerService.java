@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.grupo2.demo.dto.CustomerRequest;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.CustomerRepository;
+import com.grupo2.demo.utils.PasswordGenerator;
 
 @Service
 public class CustomerService {
@@ -13,24 +14,25 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    private boolean validatePassword(String password) {
-        if (!password.matches("\\d+")) {
-            return false;
-        }
-        return password.length() >= 4;
-    }
-
+    @Autowired
+    private EmailService emailService;
     public Customer customerCreate(CustomerRequest usuario) {
+        try {
+            Customer customer = usuario.toCustomer();
+            String generatedPassword = PasswordGenerator.generatePassword();
 
-        if (!validatePassword(usuario.getPassword())) {
-            throw new IllegalArgumentException("Senha inválida");
+            customer.setPassword(generatedPassword);
+            customer.setAtivo(true);
+            Customer savedCustomer = customerRepository.save(customer);
+
+            String subject = "Bem-vindo ao nosso sistema!";
+            String body = "Olá " + customer.getNome() + ",\n\nSua senha de acesso é: " + generatedPassword;
+            emailService.sendEmail(customer.getEmail(), subject, body);
+            
+            return savedCustomer;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar cliente", e);
         }
-
-        Customer customer = usuario.toCustomer();
-
-        customer.setAtivo(true);
-
-        return customerRepository.save(customer);
     }
-
+    
 }

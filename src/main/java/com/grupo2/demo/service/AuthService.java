@@ -2,6 +2,8 @@ package com.grupo2.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.grupo2.demo.dto.AuthResponse;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.CustomerRepository;
@@ -22,13 +24,17 @@ public class AuthService {
     @Autowired
     private HttpSession session;
 
-    public boolean authenticate(String email, String password) {
+    public AuthResponse authenticate(String email, String password) {
         Optional<Customer> customerOpt = Optional.ofNullable(clientRepository.findByEmail(email));
+        AuthResponse authResponse = new AuthResponse();
+
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
                 setUserSession(customer, "CUSTOMER");
-                return true;
+                authResponse.setUser(customer);
+                authResponse.setRole("CUSTOMER");
+                return authResponse;
             }
         }
 
@@ -37,11 +43,13 @@ public class AuthService {
             Employee employee = employeeOpt.get();
             if (checkPassword(password, employee.getPassword(), employee.getSalt())) {
                 setUserSession(employee, "EMPLOYEE");
-                return true;
+                authResponse.setUser(employee);
+                authResponse.setRole("EMPLOYEE");
+                return authResponse;
             }
         }
 
-        return false;
+        return null;
     }
 
     private void setUserSession(Object user, String role) {
@@ -55,5 +63,16 @@ public class AuthService {
         return storedPassword.equals(hashedInputPassword);
     }
 
+    public AuthResponse getSession() {
+        if(session.getAttribute("user") == null) {
+            return null;
+        }
+        else {
+            AuthResponse authResponse = new AuthResponse();
+            authResponse.setUser(session.getAttribute("user"));
+            authResponse.setRole((String) session.getAttribute("role"));
+            return authResponse;
+        }
+    }
     
 }

@@ -20,15 +20,20 @@ public class CustomerService {
         try {
             Customer customer = usuario.toCustomer();
             String generatedPassword = PasswordGenerator.generatePassword();
-
-            customer.setPassword(generatedPassword);
+    
+            String salt = PasswordGenerator.generateSalt();
+            String hashedPassword = PasswordGenerator.hashPassword(generatedPassword, salt);
+    
+            customer.setPassword(hashedPassword);
+            customer.setSalt(salt);
             customer.setAtivo(true);
+    
             Customer savedCustomer = customerRepository.save(customer);
-
+    
             String subject = "Bem-vindo ao nosso sistema!";
             String body = "Olá " + customer.getNome() + ",\n\nSua senha de acesso é: " + generatedPassword;
             emailService.sendEmail(customer.getEmail(), subject, body);
-            
+    
             return savedCustomer;
         } catch (Exception e) {
             throw new RuntimeException("Erro ao criar cliente", e);

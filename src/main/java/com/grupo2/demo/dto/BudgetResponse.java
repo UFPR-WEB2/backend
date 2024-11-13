@@ -9,6 +9,7 @@ public class BudgetResponse {
     private String descricao;
     private LocalDate dataCriacao;
     private LocalDate dataAtualizacao;
+    private String categoria;
 
     public Long getId() {
         return id;
@@ -48,5 +49,13 @@ public class BudgetResponse {
 
     public void setDataAtualizacao(LocalDate dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

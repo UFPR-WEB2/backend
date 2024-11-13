@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 public class BudgetRequest {
     private BigDecimal precoOrcado;
     private String descricao;
+    private String categoria;
 
     public BigDecimal getPrecoOrcado() {
         return precoOrcado;
@@ -20,5 +21,13 @@ public class BudgetRequest {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 }

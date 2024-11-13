@@ -27,6 +27,9 @@ public class Budget {
     @Column(nullable = false)
     private LocalDate dataAtualizacao;
 
+    @Column(nullable = false)
+    private String categoria;
+
     // Getters and Setters
     public Long getId() {
         return id;
@@ -66,5 +69,13 @@ public class Budget {
 
     public void setDataAtualizacao(LocalDate dataAtualizacao) {
         this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getCategoria() {
+        return categoria;
     }
 }

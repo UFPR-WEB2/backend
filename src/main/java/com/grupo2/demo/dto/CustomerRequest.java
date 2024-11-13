@@ -20,7 +20,6 @@ public class CustomerRequest {
         Customer user = new Customer();
         user.setNome(this.nome);
         user.setEmail(this.email);
-        user.setPassword(this.password);
         user.setCpf(this.cpf);
         user.setCep(this.cep);
         user.setPais(this.pais);

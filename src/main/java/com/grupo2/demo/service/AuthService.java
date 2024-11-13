@@ -22,8 +22,8 @@ public class AuthService {
     @Autowired
     private HttpSession session;
 
-    public boolean authenticate(String username, String password) {
-        Optional<Customer> customerOpt = Optional.ofNullable(clientRepository.findByNome(username));
+    public boolean authenticate(String email, String password) {
+        Optional<Customer> customerOpt = Optional.ofNullable(clientRepository.findByEmail(email));
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
@@ -32,7 +32,7 @@ public class AuthService {
             }
         }
 
-        Optional<Employee> employeeOpt = Optional.ofNullable(employeeRepository.findByNome(username));
+        Optional<Employee> employeeOpt = Optional.ofNullable(employeeRepository.findByEmail(email));
         if (employeeOpt.isPresent()) {
             Employee employee = employeeOpt.get();
             if (checkPassword(password, employee.getPassword(), employee.getSalt())) {
@@ -51,6 +51,7 @@ public class AuthService {
 
     private boolean checkPassword(String inputPassword, String storedPassword, String salt) {
         String hashedInputPassword = PasswordGenerator.hashPassword(inputPassword, salt);
+        System.out.println(hashedInputPassword);
         return storedPassword.equals(hashedInputPassword);
     }
 

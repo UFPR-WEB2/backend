@@ -27,7 +27,7 @@ public class AuthService {
         if (customerOpt.isPresent()) {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
-                setUserSession(customer, "CLIENT");
+                setUserSession(customer, "CUSTOMER");
                 return true;
             }
         }

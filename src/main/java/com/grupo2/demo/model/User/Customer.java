@@ -22,7 +22,7 @@ public class Customer extends User {
     @Column(length = 50, nullable = false)
     private String pais;
     
-    @Column(length = 2, nullable = false)
+    @Column(length = 25, nullable = false)
     private String estado;
     
     @Column(length = 50, nullable = false)

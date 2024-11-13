@@ -7,5 +7,6 @@ import com.grupo2.demo.model.User.Employee;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
+    Employee findByNome(String nome);
+    Employee findByEmail(String email);
 }

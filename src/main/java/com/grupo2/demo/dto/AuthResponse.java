@@ -3,8 +3,6 @@ package com.grupo2.demo.dto;
 import com.grupo2.demo.model.User.User;
 
 public class AuthResponse {
-
-
     private String name;
     private String emai;
     private Boolean active;

@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.EmployeeRequest;
 import com.grupo2.demo.dto.EmployeeResponse;
 import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.EmployeeRepository;
 
+@Service
 public class EmployeeService {
 
     @Autowired

@@ -4,58 +4,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.grupo2.demo.model.User.Employee;
-import com.grupo2.demo.repository.EmployeeRepository;
+import com.grupo2.demo.dto.EmployeeRequest;
+import com.grupo2.demo.dto.EmployeeResponse;
+import com.grupo2.demo.service.EmployeeService;
+
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/employers")
 public class EmployeeController {
 
     @Autowired
-    private EmployeeRepository employerRepository;
+    private EmployeeService employeeService;
 
     @GetMapping
-    public List<Employee> getAllEmployers() {
-        return employerRepository.findAll();
+    public List<EmployeeResponse> getAllEmployers() {
+        return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/active")
+    public List<EmployeeResponse> getAllActiveEmployees() {
+        return employeeService.getAllActiveEmployees();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployerById(@PathVariable Long id) {
-        Optional<Employee> employer = employerRepository.findById(id);
-        return employer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<EmployeeResponse> getEmployerById(@PathVariable Long id) {
+        try {
+            EmployeeResponse employer = employeeService.getEmployeeById(id);
+            return ResponseEntity.ok(employer);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
-    public Employee createEmployer(@RequestBody Employee employer) {
-        return employerRepository.save(employer);
+    public ResponseEntity<EmployeeResponse> createEmployer(@RequestBody EmployeeRequest employerRequest) {
+        EmployeeResponse newEmployer = employeeService.createEmployee(employerRequest);
+        return ResponseEntity.ok(newEmployer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployer(@PathVariable Long id, @RequestBody Employee employerDetails) {
-        Optional<Employee> employerOptional = employerRepository.findById(id);
-
-        if (employerOptional.isPresent()) {
-            Employee employer = employerOptional.get();
-
-            employer.setNome(employerDetails.getNome());
-            employer.setEmail(employerDetails.getEmail());
-            employer.setAtivo(true);
-
-            Employee updatedEmployer = employerRepository.save(employer);
+    public ResponseEntity<EmployeeResponse> updateEmployer(@PathVariable Long id,
+            @RequestBody EmployeeRequest employerRequest) {
+        try {
+            EmployeeResponse updatedEmployer = employeeService.updateEmployee(id, employerRequest);
             return ResponseEntity.ok(updatedEmployer);
-        } else {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEmployer(@PathVariable Long id) {
-        if (employerRepository.existsById(id)) {
-            employerRepository.deleteById(id);
+    public ResponseEntity<Void> deactivateEmployer(@PathVariable Long id) {
+        try {
+            employeeService.deleteEmployee(id);
             return ResponseEntity.noContent().build();
-        } else {
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }

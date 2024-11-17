@@ -28,6 +28,10 @@ public class MaintenanceResponsible {
     @JoinColumn(name = "id_funcionario", nullable = false)
     private Employee funcionario;
 
+    @ManyToOne
+    @JoinColumn(name = "id_manutencao", nullable = false)
+    private Maintenance manutencao;
+
     public Long getId() {
         return id;
     }

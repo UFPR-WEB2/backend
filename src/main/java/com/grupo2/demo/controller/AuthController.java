@@ -1,11 +1,14 @@
 package com.grupo2.demo.controller;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.grupo2.demo.dto.AuthResponse;
 import com.grupo2.demo.dto.LoginRequest;
 import com.grupo2.demo.service.AuthService;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -15,18 +18,24 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
-
-        String email = loginRequest.getEmail();
-        String password = loginRequest.getPassword();
-        AuthResponse authResponse = authService.authenticate(email, password);
-
-        return authResponse;
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+        AuthResponse authResponse = authService.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+        if (authResponse != null) {
+            return ResponseEntity.ok(authResponse);
+        }
+        return ResponseEntity.status(Response.SC_UNAUTHORIZED).build();
     }
 
     @PostMapping("getSession")
-    public AuthResponse getSession() {
-        return authService.getSession();
+    public ResponseEntity<AuthResponse> getSession() {
+
+        AuthResponse authResponse = authService.getSession();
+
+        if(authResponse != null){
+            return ResponseEntity.ok(authResponse);
+        }
+
+        return ResponseEntity.status(Response.SC_UNAUTHORIZED).build();
     }
 
 }

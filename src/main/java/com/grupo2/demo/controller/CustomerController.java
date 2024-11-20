@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.grupo2.demo.dto.CustomerRequest;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.CustomerRepository;
@@ -37,8 +38,15 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer criarCliente(@RequestBody CustomerRequest usuario) {
-        return clientService.customerCreate(usuario);
+    public ResponseEntity<Customer> criarCliente(@RequestBody CustomerRequest usuario) {
+
+        Customer customer = clientService.customerCreate(usuario);
+
+        if(customer == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(customer);
     }
 
     @GetMapping("/{id}")

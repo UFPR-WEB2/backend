@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Budget {
@@ -29,6 +31,10 @@ public class Budget {
 
     @Column(nullable = false)
     private String categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "id_manutencao", nullable = false)
+    private Maintenance maintenance;
 
     // Getters and Setters
     public Long getId() {
@@ -78,4 +84,14 @@ public class Budget {
     public String getCategoria() {
         return categoria;
     }
+
+    public Maintenance getMaintenance() {
+        return maintenance;
+    }
+
+    public void setMaintenance(Maintenance maintenance) {
+        this.maintenance = maintenance;
+    }
+
+    
 }

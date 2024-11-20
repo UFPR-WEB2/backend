@@ -36,7 +36,7 @@ public class CustomerService {
     
             return savedCustomer;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao criar cliente", e);
+            return null;
         }
     }
     

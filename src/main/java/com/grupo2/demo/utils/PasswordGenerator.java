@@ -18,7 +18,6 @@ public class PasswordGenerator {
         }
     }
 
-    // Gera um salt aleatório
     public static String generateSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];

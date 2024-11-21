@@ -3,63 +3,43 @@ package com.grupo2.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
+import com.grupo2.demo.dto.BudgetRequest;
+import com.grupo2.demo.dto.BudgetResponse;
+import com.grupo2.demo.service.BudgetService;
 import java.util.List;
-import java.util.Optional;
-
-import com.grupo2.demo.model.Maintenance.Budget;
-import com.grupo2.demo.repository.BudgetRepository;
 
 @RestController
-@RequestMapping("/api/budget")
+@RequestMapping("/api/orcamento")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BudgetController {
 
     @Autowired
-    private BudgetRepository budgetRepository;
-
-    @GetMapping
-    public List<Budget> listarBudgets() {
-        return budgetRepository.findAll();
-    }
+    private BudgetService budgetService;
 
     @PostMapping
-    public Budget criarBudget(@RequestBody Budget budget) {
-        budget.setDataCriacao(LocalDate.now());
-        budget.setDataAtualizacao(LocalDate.now());
-        return budgetRepository.save(budget);
+    public BudgetResponse criarOrcamento(@RequestBody BudgetRequest budgetRequest) {
+        return budgetService.createBudget(budgetRequest);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Budget> obterBudgetPorId(@PathVariable Long id) {
-        Optional<Budget> budget = budgetRepository.findById(id);
-        return budget.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<BudgetResponse> obterOrcamentoPorId(@PathVariable Long id) {
+        BudgetResponse budget = budgetService.getBudgetById(id);
+        return ResponseEntity.ok(budget);
+    }
+
+    @GetMapping
+    public List<BudgetResponse> listarOrcamentos() {
+        return budgetService.getAllBudgets();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Budget> atualizarBudget(@PathVariable Long id, @RequestBody Budget detalhesBudget) {
-        Optional<Budget> budgetOptional = budgetRepository.findById(id);
-
-        if (budgetOptional.isPresent()) {
-            Budget budget = budgetOptional.get();
-            budget.setPrecoOrcado(detalhesBudget.getPrecoOrcado());
-            budget.setDescricao(detalhesBudget.getDescricao());
-            budget.setDataAtualizacao(LocalDate.now());
-
-            Budget budgetAtualizado = budgetRepository.save(budget);
-            return ResponseEntity.ok(budgetAtualizado);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public BudgetResponse atualizarOrcamento(@PathVariable Long id, @RequestBody BudgetRequest budgetRequest) {
+        return budgetService.updateBudget(id, budgetRequest);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarBudget(@PathVariable Long id) {
-        if (budgetRepository.existsById(id)) {
-            budgetRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deletarOrcamento(@PathVariable Long id) {
+        budgetService.deleteBudget(id);
+        return ResponseEntity.noContent().build();
     }
 }

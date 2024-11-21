@@ -1,42 +1,28 @@
-package com.grupo2.demo.model.Maintenance;
+package com.grupo2.demo.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
-@Entity
-public class Budget {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BudgetResponse {
     private Long id;
-
-    @Column(nullable = false)
     private BigDecimal precoOrcado;
-
-    @Column(nullable = false)
     private String descricao;
-
-    @Column(nullable = false)
     private LocalDate dataCriacao;
-
-    @Column(nullable = false)
     private LocalDate dataAtualizacao;
-
-    @Column(nullable = false)
     private String categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "id_manutencao", nullable = false)
-    private Maintenance maintenance;
+    public BudgetResponse() {
+    }
 
-    // Getters and Setters
+    public BudgetResponse(Long id, BigDecimal precoOrcado, String descricao, LocalDate dataCriacao, LocalDate dataAtualizacao, String categoria) {
+        this.id = id;
+        this.precoOrcado = precoOrcado;
+        this.descricao = descricao;
+        this.dataCriacao = dataCriacao;
+        this.dataAtualizacao = dataAtualizacao;
+        this.categoria = categoria;
+    }
+
     public Long getId() {
         return id;
     }
@@ -77,21 +63,11 @@ public class Budget {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     public String getCategoria() {
         return categoria;
     }
 
-    public Maintenance getMaintenance() {
-        return maintenance;
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
-
-    public void setMaintenance(Maintenance maintenance) {
-        this.maintenance = maintenance;
-    }
-
-    
 }

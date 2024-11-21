@@ -26,12 +26,13 @@ public class Employee extends User {
         this.id = id;
     }
     
-    public LocalDate getData_nascimento() {
+    public LocalDate getDataNascimento() {
         return data_nascimento;
     }
 
-    public void setData_nascimento(LocalDate data_nascimento) {
+    public void setDataNascimento(LocalDate data_nascimento) {
         this.data_nascimento = data_nascimento;
     }
+
 
 }

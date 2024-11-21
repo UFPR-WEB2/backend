@@ -1,62 +1,48 @@
 package com.grupo2.demo.controller;
 
-import java.util.List;
-import java.util.Optional;
+import com.grupo2.demo.dto.RepairRequest;
+import com.grupo2.demo.dto.RepairResponse;
+import com.grupo2.demo.service.RepairService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.grupo2.demo.model.Maintenance.Repair;
-import com.grupo2.demo.repository.RepairRepository;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/fix")
+@RequestMapping("/api/repair")
+@CrossOrigin(origins = "http://localhost:4200")
 public class RepairController {
 
     @Autowired
-    private RepairRepository fixRepository;
+    private RepairService repairService;
 
     @PostMapping
-    public Repair postMethodName(@RequestBody Repair entity) {
-        fixRepository.save(entity);
-        return entity;
-    }
-
-    @GetMapping
-    public List<Repair> getAllFixes() {
-        return fixRepository.findAll();
+    public RepairResponse createRepair(@RequestBody RepairRequest repairRequest) {
+        return repairService.createRepair(repairRequest);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Repair> getFixById(@PathVariable Long id) {
-        Optional<Repair> fix = fixRepository.findById(id);
-        return fix.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<RepairResponse> getRepairById(@PathVariable Long id) {
+        RepairResponse repair = repairService.getRepairById(id);
+        return ResponseEntity.ok(repair);
+    }
+
+    @GetMapping
+    public List<RepairResponse> getAllRepairs() {
+        return repairService.getAllRepairs();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Repair> updateFix(@PathVariable Long id, @RequestBody Repair fixDetails) {
-        Optional<Repair> fixOptional = fixRepository.findById(id);
-
-        if (fixOptional.isPresent()) {
-            Repair fix = fixOptional.get();
-            fix.setData_conserto(fixDetails.getData_conserto());
-            fix.setDescricao_conserto(fixDetails.getDescricao_conserto());
-            fix.setOrientacao_cliente(fixDetails.getOrientacao_cliente());
-
-            Repair updatedFix = fixRepository.save(fix);
-            return ResponseEntity.ok(updatedFix);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public RepairResponse updateRepair(@PathVariable Long id, @RequestBody RepairRequest repairRequest) {
+        return repairService.updateRepair(id, repairRequest);
     }
 
+    // Ajustar no BD para evitar perda da integridade
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFix(@PathVariable Long id) {
-        if (fixRepository.existsById(id)) {
-            fixRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Void> deleteRepair(@PathVariable Long id) {
+        repairService.deleteRepair(id);
+        return ResponseEntity.noContent().build();
     }
 }

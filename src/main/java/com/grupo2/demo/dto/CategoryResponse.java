@@ -4,6 +4,14 @@ public class CategoryResponse {
     private Long id;
     private String nomeCategoria;
 
+    public CategoryResponse() {
+    }
+
+    public CategoryResponse(Long id, String nomeCategoria) {
+        this.id = id;
+        this.nomeCategoria = nomeCategoria;
+    }
+
     public Long getId() {
         return id;
     }

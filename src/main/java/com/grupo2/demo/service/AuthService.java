@@ -1,5 +1,7 @@
 package com.grupo2.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,6 @@ import com.grupo2.demo.repository.EmployeeRepository;
 import com.grupo2.demo.utils.PasswordGenerator;
 
 import jakarta.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -64,15 +65,16 @@ public class AuthService {
     }
 
     public AuthResponse getSession() {
-        if(session.getAttribute("user") == null) {
+        if (session.getAttribute("user") == null) {
             return null;
         }
-        else {
-            AuthResponse authResponse = new AuthResponse();
-            authResponse.setUser(session.getAttribute("user"));
-            authResponse.setRole((String) session.getAttribute("role"));
-            return authResponse;
-        }
+        Object user = session.getAttribute("user");
+        String role = (String) session.getAttribute("role");
+        AuthResponse authResponse = new AuthResponse();
+        authResponse.setUser(user);
+        authResponse.setRole(role);
+        return authResponse;
     }
+    
     
 }

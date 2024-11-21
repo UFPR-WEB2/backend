@@ -11,7 +11,8 @@ import com.grupo2.demo.service.EmployeeService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/employers")
+@RequestMapping("/api/employee")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmployeeController {
 
     @Autowired

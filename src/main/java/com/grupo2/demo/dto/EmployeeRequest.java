@@ -10,6 +10,16 @@ public class EmployeeRequest {
     private String password;
     private LocalDate dataNascimento;
 
+    public EmployeeRequest() {
+    }
+
+    public EmployeeRequest(String nome, String email, String password, LocalDate dataNascimento) {
+        this.nome = nome;
+        this.email = email;
+        this.password = password;
+        this.dataNascimento = dataNascimento;
+    }
+
     public Employee toEmployee() {
         Employee user = new Employee();
         user.setNome(this.nome);

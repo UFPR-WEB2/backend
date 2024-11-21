@@ -11,6 +11,18 @@ public class BudgetResponse {
     private LocalDate dataAtualizacao;
     private String categoria;
 
+    public BudgetResponse() {
+    }
+
+    public BudgetResponse(Long id, BigDecimal precoOrcado, String descricao, LocalDate dataCriacao, LocalDate dataAtualizacao, String categoria) {
+        this.id = id;
+        this.precoOrcado = precoOrcado;
+        this.descricao = descricao;
+        this.dataCriacao = dataCriacao;
+        this.dataAtualizacao = dataAtualizacao;
+        this.categoria = categoria;
+    }
+
     public Long getId() {
         return id;
     }

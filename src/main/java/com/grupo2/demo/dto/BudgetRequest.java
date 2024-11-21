@@ -7,6 +7,15 @@ public class BudgetRequest {
     private String descricao;
     private String categoria;
 
+    public BudgetRequest() {
+    }
+
+    public BudgetRequest(BigDecimal precoOrcado, String descricao, String categoria) {
+        this.precoOrcado = precoOrcado;
+        this.descricao = descricao;
+        this.categoria = categoria;
+    }
+
     public BigDecimal getPrecoOrcado() {
         return precoOrcado;
     }

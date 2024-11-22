@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.CustomerRequest;
+import com.grupo2.demo.dto.PasswordResetRequest;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.CustomerRepository;
 import com.grupo2.demo.utils.PasswordGenerator;
@@ -119,4 +120,42 @@ public class CustomerService {
         }
     }
 
+    public boolean customerPasswordRequest(PasswordResetRequest request) {
+        try {
+            Customer customer = customerRepository.findByEmail(request.getEmail());
+            if (customer == null) {
+                return false;
+            }
+
+            String generatedPassword = PasswordGenerator.generatePassword();
+            String salt = PasswordGenerator.generateSalt();
+            String hashedPassword = PasswordGenerator.hashPassword(generatedPassword, salt);
+
+            customer.setPassword(hashedPassword);
+            customer.setSalt(salt);
+            customerRepository.save(customer);
+
+            String subject = "Recuperação de Senha";
+            String body = "<!DOCTYPE html>" +
+                          "<html>" +
+                          "<head>" +
+                          "<meta charset='UTF-8'>" +
+                          "<title>Recuperação de Senha</title>" +
+                          "</head>" +
+                          "<body>" +
+                          "<p>Olá " + customer.getNome() + ",</p>" +
+                          "<p>Recebemos sua solicitação de recuperação de senha. Sua nova senha é: <strong>" + generatedPassword + "</strong></p>" +
+                          "<p>Por favor, faça login e altere sua senha imediatamente.</p>" +
+                          "<p>Atenciosamente,<br>Sua Equipe de Suporte</p>" +
+                          "</body>" +
+                          "</html>";
+
+            emailService.sendEmail(customer.getEmail(), subject, body);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

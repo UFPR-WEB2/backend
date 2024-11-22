@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.grupo2.demo.dto.CustomerRequest;
+import com.grupo2.demo.dto.PasswordResetRequest;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.CustomerRepository;
 import com.grupo2.demo.service.CustomerService;
@@ -50,6 +51,16 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.CREATED).body(customer);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<String> requestPasswordReset(@RequestBody PasswordResetRequest request) {
+        boolean isSuccess = clientService.customerPasswordRequest(request);
+        if (isSuccess) {
+            return ResponseEntity.ok("Email de recuperação de senha enviado com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Falha ao enviar email de recuperação de senha.");
         }
     }
 

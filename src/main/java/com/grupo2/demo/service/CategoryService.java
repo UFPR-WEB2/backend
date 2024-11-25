@@ -19,6 +19,9 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private AuthService authService;
+
     public List<CategoryResponse> listarCategorias() {
         List<Category> categorias = categoryRepository.findAll();
         return categorias.stream().map(this::mapToResponse).collect(Collectors.toList());
@@ -30,6 +33,8 @@ public class CategoryService {
     }
 
     public CategoryResponse criarCategoria(CategoryRequest categoryRequest) {
+
+        authService.checkEmployeeAuth();
 
         if(categoryRequest.getNomeCategoria() == null || categoryRequest.getNomeCategoria().isEmpty()) {
             throw new CategoryNullException("Verifique se o campo de nome da categoria está preenchido");
@@ -53,6 +58,9 @@ public class CategoryService {
     }
 
     public CategoryResponse atualizarCategoria(Long id, CategoryRequest categoryRequest) {
+
+        authService.checkEmployeeAuth();
+
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Categoria não encontrada com ID: " + id));
         
@@ -66,6 +74,9 @@ public class CategoryService {
     }
 
     public void deletarCategoria(Long id) {
+
+        authService.checkEmployeeAuth();
+
         if (!categoryRepository.existsById(id)) {
             throw new CategoryNotFoundException("Categoria não encontrada com ID: " + id);
         }

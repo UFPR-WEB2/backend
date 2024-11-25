@@ -32,6 +32,9 @@ public class MaintenanceService {
     private StatusRepository statusRepository;
 
     public MaintenanceResponse createMaintenance(MaintenanceRequest maintenanceRequest) {
+
+        authService.checkCustomerAuth();
+
         Maintenance maintenance = new Maintenance();
 
         if(maintenanceRequest.getDescricaoEquipamento() == null || maintenanceRequest.getDescricaoEquipamento().isEmpty() || maintenanceRequest.getDescricaoDefeito() == null || maintenanceRequest.getDescricaoDefeito().isEmpty()) {
@@ -68,6 +71,7 @@ public class MaintenanceService {
     }
 
     public MaintenanceResponse updateMaintenance(Long id, MaintenanceRequest maintenanceRequest) {
+        authService.checkCustomerAuth();
 
         if(maintenanceRequest.getDescricaoEquipamento() == null || maintenanceRequest.getDescricaoEquipamento().isEmpty() || maintenanceRequest.getDescricaoDefeito() == null || maintenanceRequest.getDescricaoDefeito().isEmpty()) {
             throw new MaintenanceNullException("Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
@@ -90,6 +94,8 @@ public class MaintenanceService {
     }
 
     public MaintenanceResponse finishMaintenance(Long id) {
+        authService.checkAuth();
+
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
 
@@ -106,6 +112,7 @@ public class MaintenanceService {
 
 
     public void deleteMaintenance(Long id) {
+        authService.checkAuth();
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
         maintenanceRepository.delete(maintenance);

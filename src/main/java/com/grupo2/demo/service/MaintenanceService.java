@@ -10,18 +10,40 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
 
+import com.grupo2.demo.repository.StatusRepository;
+import com.grupo2.demo.config.StatusEnum;
+import com.grupo2.demo.model.Maintenance.Status;
+
 @Service
 public class MaintenanceService {
 
     @Autowired
     private MaintenanceRepository maintenanceRepository;
 
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private StatusRepository statusRepository;
+
     public MaintenanceResponse createMaintenance(MaintenanceRequest maintenanceRequest) {
         Maintenance maintenance = new Maintenance();
+
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
         maintenance.setData_criacao(LocalDate.now());
         maintenance.setData_finalizacao(null);
+
+        maintenance.setCliente(authService.getCustomer());
+        maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.ABERTA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        maintenance.setStatus(status);
+
         Maintenance savedMaintenance = maintenanceRepository.save(maintenance);
         return mapToResponse(savedMaintenance);
     }

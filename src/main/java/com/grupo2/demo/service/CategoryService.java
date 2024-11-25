@@ -58,6 +58,14 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    public Category obterCategoriaPorNome(String nomeCategoria) {
+        Category category = categoryRepository.findByNomeCategoria(nomeCategoria);
+        if (category == null) {
+            throw new RuntimeException("Categoria não encontrada com nome: " + nomeCategoria);
+        }
+        return category;
+    }
+
     private CategoryResponse mapToResponse(Category category) {
         CategoryResponse response = new CategoryResponse();
         response.setId(category.getId());

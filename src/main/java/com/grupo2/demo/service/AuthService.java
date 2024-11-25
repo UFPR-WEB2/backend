@@ -75,6 +75,14 @@ public class AuthService {
         authResponse.setRole(role);
         return authResponse;
     }
+
+
+    public Customer getCustomer() {
+        return (Customer) session.getAttribute("user");
+    }
     
+    public void logout() {
+        session.invalidate();
+    }
     
 }

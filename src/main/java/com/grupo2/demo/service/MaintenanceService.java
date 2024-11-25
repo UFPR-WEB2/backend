@@ -21,7 +21,7 @@ public class MaintenanceService {
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
         maintenance.setData_criacao(LocalDate.now());
-        maintenance.setData_finalizacao(null); // Inicialmente não finalizada
+        maintenance.setData_finalizacao(null);
         Maintenance savedMaintenance = maintenanceRepository.save(maintenance);
         return mapToResponse(savedMaintenance);
     }

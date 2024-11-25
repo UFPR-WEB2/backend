@@ -1,10 +1,8 @@
 package com.grupo2.demo.model.Maintenance;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.grupo2.demo.config.StatusEnum;
+
+import jakarta.persistence.*;
 
 @Entity
 public class Status {
@@ -12,10 +10,16 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     @Column(length = 50, nullable = false)
-    private String nome_status;
+    private StatusEnum nomeStatus;
 
     public Status() {}
+
+    public Status(StatusEnum nomeStatus) {
+        this.nomeStatus = nomeStatus;
+    }
 
     public Long getId() {
         return id;
@@ -25,11 +29,12 @@ public class Status {
         this.id = id;
     }
 
-    public String getNome_status() {
-        return nome_status;
+    public StatusEnum getNomeStatus() {
+        return nomeStatus;
     }
 
-    public void setNome_status(String nome_status) {
-        this.nome_status = nome_status;
+    public void setNomeStatus(StatusEnum nomeStatus) {
+        this.nomeStatus = nomeStatus;
     }
+
 }

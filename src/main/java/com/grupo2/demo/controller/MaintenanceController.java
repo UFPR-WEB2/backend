@@ -1,6 +1,7 @@
 package com.grupo2.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.grupo2.demo.dto.MaintenanceRequest;
@@ -23,7 +24,7 @@ public class MaintenanceController {
     @PostMapping
     public ResponseEntity<MaintenanceResponse> criarManutencao(@RequestBody MaintenanceRequest maintenanceRequest) {
         MaintenanceResponse maintenance = maintenanceService.createMaintenance(maintenanceRequest);
-        return ResponseEntity.ok(maintenance);
+        return ResponseEntity.status(HttpStatus.CREATED).body(maintenance);
     }
 
     @GetMapping("/{id}")

@@ -5,6 +5,7 @@ import com.grupo2.demo.dto.CategoryResponse;
 import com.grupo2.demo.service.CategoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +30,9 @@ public class CategoryController {
     }
 
     @PostMapping
-    public CategoryResponse criarCategoria(@RequestBody CategoryRequest categoryRequest) {
-        return categoryService.criarCategoria(categoryRequest);
+    public ResponseEntity<CategoryResponse> criarCategoria(@RequestBody CategoryRequest categoryRequest) {
+        CategoryResponse response = categoryService.criarCategoria(categoryRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")

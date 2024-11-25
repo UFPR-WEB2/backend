@@ -27,7 +27,7 @@ public class Maintenance {
     @Column(nullable = false)
     private LocalDate data_criacao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate data_finalizacao;
 
     @ManyToOne

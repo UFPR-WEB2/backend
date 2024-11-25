@@ -13,7 +13,7 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 50, nullable = false)
-    private String nome_categoria;
+    private String nomeCategoria;
 
     private Boolean ativo;
 
@@ -28,11 +28,11 @@ public class Category {
     }
 
     public String getNome_categoria() {
-        return nome_categoria;
+        return nomeCategoria;
     }
 
     public void setNome_categoria(String nome_categoria) {
-        this.nome_categoria = nome_categoria;
+        this.nomeCategoria = nome_categoria;
     }
 
     public Boolean getAtivo() {

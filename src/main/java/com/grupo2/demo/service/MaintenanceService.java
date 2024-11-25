@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.dto.MaintenanceResponse;
+import com.grupo2.demo.exception.MaintenanceNotFoundException;
+import com.grupo2.demo.exception.MaintenanceNullException;
 import com.grupo2.demo.model.Maintenance.Maintenance;
 import com.grupo2.demo.repository.MaintenanceRepository;
 import java.util.List;
@@ -30,7 +32,14 @@ public class MaintenanceService {
     private StatusRepository statusRepository;
 
     public MaintenanceResponse createMaintenance(MaintenanceRequest maintenanceRequest) {
+
+        authService.checkCustomerAuth();
+
         Maintenance maintenance = new Maintenance();
+
+        if(maintenanceRequest.getDescricaoEquipamento() == null || maintenanceRequest.getDescricaoEquipamento().isEmpty() || maintenanceRequest.getDescricaoDefeito() == null || maintenanceRequest.getDescricaoDefeito().isEmpty()) {
+            throw new MaintenanceNullException("Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
+        }
 
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
@@ -51,7 +60,8 @@ public class MaintenanceService {
 
     public MaintenanceResponse getMaintenanceById(Long id) {
         Maintenance maintenance = maintenanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+            .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
+
         return mapToResponse(maintenance);
     }
 
@@ -61,11 +71,18 @@ public class MaintenanceService {
     }
 
     public MaintenanceResponse updateMaintenance(Long id, MaintenanceRequest maintenanceRequest) {
+        authService.checkCustomerAuth();
+
+        if(maintenanceRequest.getDescricaoEquipamento() == null || maintenanceRequest.getDescricaoEquipamento().isEmpty() || maintenanceRequest.getDescricaoDefeito() == null || maintenanceRequest.getDescricaoDefeito().isEmpty()) {
+            throw new MaintenanceNullException("Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
+        }
+
         Maintenance maintenance = maintenanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+                    .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
 
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
+
         maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
 
         Status status = statusRepository.findByNomeStatus(StatusEnum.ABERTA)
@@ -77,8 +94,10 @@ public class MaintenanceService {
     }
 
     public MaintenanceResponse finishMaintenance(Long id) {
+        authService.checkAuth();
+
         Maintenance maintenance = maintenanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
 
         maintenance.setData_finalizacao(LocalDateTime.now());
 
@@ -93,8 +112,9 @@ public class MaintenanceService {
 
 
     public void deleteMaintenance(Long id) {
+        authService.checkAuth();
         Maintenance maintenance = maintenanceRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
         maintenanceRepository.delete(maintenance);
     }
 

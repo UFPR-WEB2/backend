@@ -70,6 +70,7 @@ public class CategoryService {
         CategoryResponse response = new CategoryResponse();
         response.setId(category.getId());
         response.setNomeCategoria(category.getNome_categoria());
+        response.setAtivo(category.getAtivo());
         return response;
     }
 }

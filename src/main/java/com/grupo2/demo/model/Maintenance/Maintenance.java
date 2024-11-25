@@ -1,6 +1,6 @@
 package com.grupo2.demo.model.Maintenance;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.grupo2.demo.model.User.Customer;
 
@@ -25,10 +25,10 @@ public class Maintenance {
     private String descricao_defeito;
 
     @Column(nullable = false)
-    private LocalDate data_criacao;
+    private LocalDateTime data_criacao;
 
     @Column(nullable = true)
-    private LocalDate data_finalizacao;
+    private LocalDateTime data_finalizacao;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
@@ -66,19 +66,19 @@ public class Maintenance {
         this.descricao_defeito = descricao_defeito;
     }
 
-    public LocalDate getData_criacao() {
+    public LocalDateTime getData_criacao() {
         return data_criacao;
     }
 
-    public void setData_criacao(LocalDate data_criacao) {
+    public void setData_criacao(LocalDateTime data_criacao) {
         this.data_criacao = data_criacao;
     }
 
-    public LocalDate getData_finalizacao() {
+    public LocalDateTime getData_finalizacao() {
         return data_finalizacao;
     }
 
-    public void setData_finalizacao(LocalDate data_finalizacao) {
+    public void setData_finalizacao(LocalDateTime data_finalizacao) {
         this.data_finalizacao = data_finalizacao;
     }
 

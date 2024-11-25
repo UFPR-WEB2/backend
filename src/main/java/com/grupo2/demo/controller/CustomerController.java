@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.grupo2.demo.dto.CustomerRequest;
+import com.grupo2.demo.dto.PasswordResetRequest;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.repository.CustomerRepository;
 import com.grupo2.demo.service.CustomerService;
@@ -39,14 +40,28 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Customer> criarCliente(@RequestBody CustomerRequest usuario) {
+        Customer existingCustomer = clientRepository.findByEmail(usuario.getEmail());
 
-        Customer customer = clientService.customerCreate(usuario);
-
-        if(customer == null){
-            return ResponseEntity.badRequest().build();
+        if (existingCustomer != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
 
-        return ResponseEntity.ok(customer);
+        try {
+            Customer customer = clientService.customerCreate(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(customer);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+    }
+
+    @PostMapping("/password-reset")
+    public ResponseEntity<String> requestPasswordReset(@RequestBody PasswordResetRequest request) {
+        boolean isSuccess = clientService.customerPasswordRequest(request);
+        if (isSuccess) {
+            return ResponseEntity.ok("Email de recuperação de senha enviado com sucesso.");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Falha ao enviar email de recuperação de senha.");
+        }
     }
 
     @GetMapping("/{id}")

@@ -9,6 +9,17 @@ public class EmployeeResponse {
     private LocalDate dataNascimento;
     private Boolean ativo;
 
+    public EmployeeResponse() {
+    }
+
+    public EmployeeResponse(Long id, String nome, String email, LocalDate dataNascimento, Boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.dataNascimento = dataNascimento;
+        this.ativo = ativo;
+    }
+
     public Long getId() {
         return id;
     }

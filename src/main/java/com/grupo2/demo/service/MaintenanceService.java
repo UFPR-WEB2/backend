@@ -8,7 +8,11 @@ import com.grupo2.demo.model.Maintenance.Maintenance;
 import com.grupo2.demo.repository.MaintenanceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import com.grupo2.demo.repository.StatusRepository;
+import com.grupo2.demo.config.StatusEnum;
+import com.grupo2.demo.model.Maintenance.Status;
 
 @Service
 public class MaintenanceService {
@@ -16,13 +20,32 @@ public class MaintenanceService {
     @Autowired
     private MaintenanceRepository maintenanceRepository;
 
+    @Autowired
+    private AuthService authService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private StatusRepository statusRepository;
+
     public MaintenanceResponse createMaintenance(MaintenanceRequest maintenanceRequest) {
         Maintenance maintenance = new Maintenance();
+
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
-        maintenance.setData_criacao(LocalDate.now());
+        maintenance.setData_criacao(LocalDateTime.now());
         maintenance.setData_finalizacao(null);
+
+        maintenance.setCliente(authService.getCustomer());
+        maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.ABERTA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        maintenance.setStatus(status);
+
         Maintenance savedMaintenance = maintenanceRepository.save(maintenance);
+        
         return mapToResponse(savedMaintenance);
     }
 
@@ -40,12 +63,34 @@ public class MaintenanceService {
     public MaintenanceResponse updateMaintenance(Long id, MaintenanceRequest maintenanceRequest) {
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
-        maintenance.setData_finalizacao(LocalDate.now());
+        maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.ABERTA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        maintenance.setStatus(status);
+
         Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
         return mapToResponse(updatedMaintenance);
     }
+
+    public MaintenanceResponse finishMaintenance(Long id) {
+        Maintenance maintenance = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Manutenção não encontrada com id: " + id));
+
+        maintenance.setData_finalizacao(LocalDateTime.now());
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.FINALIZADA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        maintenance.setStatus(status);
+
+        Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
+        return mapToResponse(updatedMaintenance);
+    }
+
+
 
     public void deleteMaintenance(Long id) {
         Maintenance maintenance = maintenanceRepository.findById(id)
@@ -60,6 +105,11 @@ public class MaintenanceService {
         response.setDescricaoDefeito(maintenance.getDescricao_defeito());
         response.setDataCriacao(maintenance.getData_criacao());
         response.setDataFinalizacao(maintenance.getData_finalizacao());
+
+        response.setNomeCategoria(maintenance.getCategoria().getNome_categoria());
+        response.setNomeStatus(maintenance.getStatus().getNomeStatus());
+        response.setNomeCliente(maintenance.getCliente().getNome());
+
         return response;
     }
 }

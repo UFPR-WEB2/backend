@@ -7,6 +7,10 @@ import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.service.MaintenanceService;
 import java.util.List;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/api/manutencao")
@@ -17,8 +21,9 @@ public class MaintenanceController {
     private MaintenanceService maintenanceService;
 
     @PostMapping
-    public MaintenanceResponse criarManutencao(@RequestBody MaintenanceRequest maintenanceRequest) {
-        return maintenanceService.createMaintenance(maintenanceRequest);
+    public ResponseEntity<MaintenanceResponse> criarManutencao(@RequestBody MaintenanceRequest maintenanceRequest) {
+        MaintenanceResponse maintenance = maintenanceService.createMaintenance(maintenanceRequest);
+        return ResponseEntity.ok(maintenance);
     }
 
     @GetMapping("/{id}")
@@ -35,6 +40,13 @@ public class MaintenanceController {
     @PutMapping("/{id}")
     public MaintenanceResponse atualizarManutencao(@PathVariable Long id, @RequestBody MaintenanceRequest maintenanceRequest) {
         return maintenanceService.updateMaintenance(id, maintenanceRequest);
+    }
+
+    @PutMapping("finish/{id}")
+    public ResponseEntity<MaintenanceResponse> putMethodName(@PathVariable Long id) {
+        
+        MaintenanceResponse entity = maintenanceService.finishMaintenance(id);
+        return ResponseEntity.ok(entity);
     }
 
     @DeleteMapping("/{id}")

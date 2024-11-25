@@ -3,6 +3,7 @@ package com.grupo2.demo.dto;
 public class CategoryResponse {
     private Long id;
     private String nomeCategoria;
+    private Boolean ativo;
 
     public CategoryResponse() {
     }
@@ -26,5 +27,13 @@ public class CategoryResponse {
 
     public void setNomeCategoria(String nomeCategoria) {
         this.nomeCategoria = nomeCategoria;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

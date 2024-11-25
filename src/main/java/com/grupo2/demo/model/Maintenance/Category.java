@@ -15,6 +15,8 @@ public class Category {
     @Column(length = 50, nullable = false)
     private String nome_categoria;
 
+    private Boolean ativo;
+
     public Category() {}
 
     public Long getId() {
@@ -31,5 +33,13 @@ public class Category {
 
     public void setNome_categoria(String nome_categoria) {
         this.nome_categoria = nome_categoria;
+    }
+
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

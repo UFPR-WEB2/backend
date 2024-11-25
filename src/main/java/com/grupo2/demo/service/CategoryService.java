@@ -21,9 +21,15 @@ public class CategoryService {
         return categorias.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
+    public List<CategoryResponse> listarCategoriasAtivas() {
+        List<Category> categorias = categoryRepository.findByAtivo(true);
+        return categorias.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public CategoryResponse criarCategoria(CategoryRequest categoryRequest) {
         Category category = new Category();
         category.setNome_categoria(categoryRequest.getNomeCategoria());
+        category.setAtivo(true);
         Category savedCategory = categoryRepository.save(category);
         return mapToResponse(savedCategory);
     }
@@ -43,12 +49,13 @@ public class CategoryService {
         return mapToResponse(categoriaAtualizada);
     }
 
-    // Precisa modificar o BD para desativar e nao perder a integridade
     public void deletarCategoria(Long id) {
         if (!categoryRepository.existsById(id)) {
             throw new RuntimeException("Categoria não encontrada com ID: " + id);
         }
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id).get();
+        category.setAtivo(false);
+        categoryRepository.save(category);
     }
 
     private CategoryResponse mapToResponse(Category category) {

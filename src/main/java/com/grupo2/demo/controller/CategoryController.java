@@ -23,6 +23,11 @@ public class CategoryController {
         return categoryService.listarCategorias();
     }
 
+    @GetMapping("/active")
+    public List<CategoryResponse> listarCategoriasAtivas() {
+        return categoryService.listarCategoriasAtivas();
+    }
+
     @PostMapping
     public CategoryResponse criarCategoria(@RequestBody CategoryRequest categoryRequest) {
         return categoryService.criarCategoria(categoryRequest);

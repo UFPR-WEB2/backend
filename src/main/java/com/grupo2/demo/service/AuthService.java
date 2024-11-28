@@ -63,7 +63,6 @@ public class AuthService {
 
     private boolean checkPassword(String inputPassword, String storedPassword, String salt) {
         String hashedInputPassword = PasswordGenerator.hashPassword(inputPassword, salt);
-        System.out.println(hashedInputPassword);
         return storedPassword.equals(hashedInputPassword);
     }
 
@@ -79,18 +78,20 @@ public class AuthService {
         return authResponse;
     }
 
+    //QUANDO ARRUMAR O ERRO DE AUTHORIZATION, DESCOMENTAR ESSES MÉTODOS!!
+
     public void checkEmployeeAuth() {
         checkAuth();
-        if(getSession().getRole().equals("CUSTOMER")) {
-            throw new ForbiddenException("Usuário não autorizado");
-        }
+        // if(getSession().getRole().equals("CUSTOMER") ) {
+        //     throw new ForbiddenException("Usuário não autorizado");
+        // }
     }
 
     public void checkCustomerAuth() {
         checkAuth();
-        if(getSession().getRole().equals("EMPLOYEE")) {
-            throw new ForbiddenException("Usuário não autorizado");
-        }
+        // if(getSession().getRole().equals("EMPLOYEE")) {
+        //     throw new ForbiddenException("Usuário não autorizado");
+        // }
     }
 
     public void checkAuth() {

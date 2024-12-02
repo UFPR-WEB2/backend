@@ -77,5 +77,12 @@ public class MaintenanceResponsible {
         this.funcionarioAnterior = funcionarioAnterior;
     }
     
+    public Maintenance getManutencao() {
+        return manutencao;
+    }
+
+    public void setManutencao(Maintenance manutencao) {
+        this.manutencao = manutencao;
+    }
     
 }

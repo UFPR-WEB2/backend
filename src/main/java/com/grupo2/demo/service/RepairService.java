@@ -20,7 +20,7 @@ public class RepairService {
 
     public RepairResponse createRepair(MaintenanceResponsible maintenanceResponsible, RepairRequest repairRequest) {
         Repair repair = new Repair();
-        
+
         repair.setData_conserto(repairRequest.getDataConserto());
         repair.setDescricao_conserto(repairRequest.getDescricaoConserto());
         repair.setOrientacao_cliente(repairRequest.getOrientacaoCliente());

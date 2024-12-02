@@ -29,7 +29,7 @@ public class Budget {
     @Column(nullable = true)
     private LocalDateTime dataRejeicao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime dataRecuperacao;
 
     @Column(nullable = false)

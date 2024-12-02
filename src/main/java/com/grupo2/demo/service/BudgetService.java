@@ -52,7 +52,7 @@ public class BudgetService {
         budgetedMaintenance(budgetRequest.getMaintenanceId());
 
         //Da para separar isso em uma funcao privada do bugdetService e criar todo uma estrutura para DTO e no MaintenanceResponsibleService somente passar o DTO e um create basico
-        maintenanceResponsibleService.startFirstBudget(authService.getEmployee().getId());
+        maintenanceResponsibleService.startFirstBudget(authService.getEmployee().getId(), maintenance);
 
         Budget savedBudget = budgetRepository.save(budget);
         return mapToResponse(savedBudget);

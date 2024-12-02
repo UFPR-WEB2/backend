@@ -9,6 +9,7 @@ import com.grupo2.demo.exception.MaintenanceNullException;
 import com.grupo2.demo.model.Maintenance.Maintenance;
 import com.grupo2.demo.repository.MaintenanceRepository;
 import java.util.List;
+import com.grupo2.demo.model.Maintenance.Category;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 
@@ -72,26 +73,33 @@ public class MaintenanceService {
 
     public MaintenanceResponse updateMaintenance(Long id, MaintenanceRequest maintenanceRequest) {
         authService.checkCustomerAuth();
-
-        if(maintenanceRequest.getDescricaoEquipamento() == null || maintenanceRequest.getDescricaoEquipamento().isEmpty() || maintenanceRequest.getDescricaoDefeito() == null || maintenanceRequest.getDescricaoDefeito().isEmpty()) {
-            throw new MaintenanceNullException("Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
+    
+        Maintenance maintenance = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
+    
+        if (maintenanceRequest.getDescricaoEquipamento() != null && !maintenanceRequest.getDescricaoEquipamento().isEmpty()) {
+            maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
         }
 
-        Maintenance maintenance = maintenanceRepository.findById(id)
-                    .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
+        if (maintenanceRequest.getDescricaoDefeito() != null && !maintenanceRequest.getDescricaoDefeito().isEmpty()) {
+            maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
+        }
 
-        maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
-        maintenance.setDescricao_defeito(maintenanceRequest.getDescricaoDefeito());
-
-        maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
-
-        Status status = statusRepository.findByNomeStatus(StatusEnum.ABERTA)
-                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
-        maintenance.setStatus(status);
-
+        if (maintenanceRequest.getNomeCategoria() != null && !maintenanceRequest.getNomeCategoria().isEmpty()) {
+            Category category = categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria());
+            maintenance.setCategoria(category);
+        }
+    
+        if (maintenanceRequest.getStatus() != null) {
+            Status status = statusRepository.findByNomeStatus(maintenanceRequest.getStatus())
+                    .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+            maintenance.setStatus(status);
+        }
+    
         Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
         return mapToResponse(updatedMaintenance);
     }
+    
 
     public MaintenanceResponse finishMaintenance(Long id) {
         authService.checkAuth();

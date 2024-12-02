@@ -32,6 +32,10 @@ public class MaintenanceResponsible {
     @JoinColumn(name = "id_manutencao", nullable = false)
     private Maintenance manutencao;
 
+    @ManyToOne
+    @JoinColumn(name = "id_reparo", nullable = false)
+    private Repair reparo;
+
     public Long getId() {
         return id;
     }
@@ -64,5 +68,6 @@ public class MaintenanceResponsible {
         this.funcionario = funcionario;
     }
 
+    
     
 }

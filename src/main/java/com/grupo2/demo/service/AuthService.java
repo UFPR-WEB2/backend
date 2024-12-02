@@ -95,7 +95,7 @@ public class AuthService {
     }
 
     public void checkAuth() {
-        if(getSession() != null) {
+        if(getSession() == null) {
             throw new UnauthorizedException("Usuário não autenticado, faça login para continuar");
         }
     }

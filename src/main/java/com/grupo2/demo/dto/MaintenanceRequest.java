@@ -1,9 +1,12 @@
 package com.grupo2.demo.dto;
 
+import com.grupo2.demo.config.StatusEnum;
+
 public class MaintenanceRequest {
     private String descricaoEquipamento;
     private String descricaoDefeito;
     private String nomeCategoria;
+    private StatusEnum status;
 
 
     public String getDescricaoEquipamento() {
@@ -28,6 +31,14 @@ public class MaintenanceRequest {
 
     public void setNomeCategoria(String nomeCategoria) {
         this.nomeCategoria = nomeCategoria;
+    }
+
+    public StatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
 }

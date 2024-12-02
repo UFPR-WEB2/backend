@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.grupo2.demo.config.StatusEnum;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
+import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.exception.BudgetNotFoundException;
 import com.grupo2.demo.exception.MaintenanceNotFoundException;
 import com.grupo2.demo.model.Maintenance.Budget;
@@ -26,12 +27,15 @@ public class BudgetService {
     @Autowired
     private MaintenanceRepository maintenanceRepository;
 
+    @Autowired
+    private MaintenanceService maintenanceService;
+
     public BudgetResponse createBudget(BudgetRequest budgetRequest) {
         Budget budget = new Budget();
 
         budget.setPrecoOrcado(budgetRequest.getPrecoOrcado());
         budget.setDataOrcamento(LocalDateTime.now());
-        budget.setStatus(StatusEnum.ORCADA);
+        budget.setStatus(true);
 
         Maintenance maintenance = maintenanceRepository.findById(budgetRequest.getMaintenanceId())
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + budgetRequest.getMaintenanceId()));
@@ -67,7 +71,7 @@ public class BudgetService {
     public void deleteBudget(Long id) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
-        budget.setStatus(StatusEnum.FINALIZADA);
+        budget.setStatus(false);
         budgetRepository.save(budget);
     }
 
@@ -75,9 +79,10 @@ public class BudgetService {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
 
-        budget.setStatus(StatusEnum.APROVADA);
         budget.setDataRecuperacao(LocalDateTime.now());
         budgetRepository.save(budget);
+        approveMaintenance(budget.getMaintenance().getId());
+        
         return mapToResponse(budget);
     }
 
@@ -85,16 +90,16 @@ public class BudgetService {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
 
-        budget.setStatus(StatusEnum.REJEITADA);
         budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
         budgetRepository.save(budget);
+        rejectMaintenance(budget.getMaintenance().getId());
         return mapToResponse(budget);
     }
 
     private BudgetResponse mapToResponse(Budget budget) {
         BudgetResponse response = new BudgetResponse();
-        
+
         response.setId(budget.getId());
         response.setPrecoOrcado(budget.getPrecoOrcado());
         response.setDataOrcamento(budget.getDataOrcamento());
@@ -104,5 +109,17 @@ public class BudgetService {
         response.setDataRecuperacao(budget.getDataRecuperacao());
 
         return response;
+    }
+
+    private void rejectMaintenance(Long id) {
+        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
+        maintenanceRequest.setStatus(StatusEnum.REJEITADA);
+        maintenanceService.updateMaintenance(id, maintenanceRequest);
+    }
+
+    private void approveMaintenance(Long id) {
+        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
+        maintenanceRequest.setStatus(StatusEnum.APROVADA);
+        maintenanceService.updateMaintenance(id, maintenanceRequest);
     }
 }

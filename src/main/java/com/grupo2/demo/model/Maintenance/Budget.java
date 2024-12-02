@@ -3,8 +3,6 @@ package com.grupo2.demo.model.Maintenance;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.grupo2.demo.config.StatusEnum;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,7 +33,7 @@ public class Budget {
     private LocalDateTime dataRecuperacao;
 
     @Column(nullable = false)
-    private StatusEnum status;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "id_manutencao", nullable = false)
@@ -89,11 +87,11 @@ public class Budget {
         this.dataRecuperacao = dataRecuperacao;
     }
 
-    public StatusEnum getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

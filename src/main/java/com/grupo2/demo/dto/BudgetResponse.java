@@ -3,8 +3,6 @@ package com.grupo2.demo.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.grupo2.demo.config.StatusEnum;
-
 public class BudgetResponse {
     private Long id;
     private BigDecimal precoOrcado;
@@ -12,7 +10,7 @@ public class BudgetResponse {
     private String justificativaRejeicao;
     private LocalDateTime dataRejeicao;
     private LocalDateTime dataRecuperacao;
-    private StatusEnum status;
+    private Boolean status;
     private Long maintenanceId;
 
     public BudgetResponse() {
@@ -68,11 +66,11 @@ public class BudgetResponse {
         this.dataRecuperacao = dataRecuperacao;
     }
 
-    public StatusEnum getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(StatusEnum status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 

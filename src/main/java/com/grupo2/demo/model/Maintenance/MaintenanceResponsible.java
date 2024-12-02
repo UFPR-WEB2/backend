@@ -22,7 +22,7 @@ public class MaintenanceResponsible {
     private LocalDate data_redirecionamento;
 
     @Column(nullable = false)
-    private String Status;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "id_funcionario", nullable = false)
@@ -53,11 +53,11 @@ public class MaintenanceResponsible {
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String Status) {
-        this.Status = Status;
+        this.status = Status;
     }
 
     public Employee getFuncionario() {

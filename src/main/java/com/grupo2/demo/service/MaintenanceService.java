@@ -118,7 +118,6 @@ public class MaintenanceService {
     }
 
 
-
     public void deleteMaintenance(Long id) {
         authService.checkAuth();
         Maintenance maintenance = maintenanceRepository.findById(id)

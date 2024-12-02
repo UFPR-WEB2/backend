@@ -31,6 +31,12 @@ public class EmployeeService {
         return mapToResponse(employee);
     }
 
+    public Employee getEmployeeById2(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
+        return employee;
+    }
+
     public EmployeeResponse getEmployeeByName(String nome) {
         Employee employee = employeeRepository.findByNome(nome);
         return mapToResponse(employee);

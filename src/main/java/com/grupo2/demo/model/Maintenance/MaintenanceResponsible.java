@@ -18,23 +18,24 @@ public class MaintenanceResponsible {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDate data_redirecionamento;
 
     @Column(nullable = false)
-    private String status;
+    private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "id_funcionario", nullable = false)
+    @JoinColumn(name = "id_funcionarioAtual", nullable = false)
     private Employee funcionario;
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionarioAnterior", nullable = true)
+    private Employee funcionarioAnterior;
 
     @ManyToOne
     @JoinColumn(name = "id_manutencao", nullable = false)
     private Maintenance manutencao;
 
-    @ManyToOne
-    @JoinColumn(name = "id_reparo", nullable = false)
-    private Repair reparo;
 
     public Long getId() {
         return id;
@@ -52,11 +53,11 @@ public class MaintenanceResponsible {
         this.data_redirecionamento = data_redirecionamento;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String Status) {
+    public void setStatus(Boolean Status) {
         this.status = Status;
     }
 
@@ -68,6 +69,13 @@ public class MaintenanceResponsible {
         this.funcionario = funcionario;
     }
 
+    public Employee getFuncionarioAnterior() {
+        return funcionarioAnterior;
+    }
+
+    public void setFuncionarioAnterior(Employee funcionarioAnterior) {
+        this.funcionarioAnterior = funcionarioAnterior;
+    }
     
     
 }

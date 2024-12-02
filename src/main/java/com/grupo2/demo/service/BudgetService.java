@@ -30,6 +30,13 @@ public class BudgetService {
     @Autowired
     private MaintenanceService maintenanceService;
 
+    @Autowired
+    private MaintenanceResponsibleService maintenanceResponsibleService;
+
+    @Autowired
+    private AuthService authService;
+
+
     public BudgetResponse createBudget(BudgetRequest budgetRequest) {
         Budget budget = new Budget();
 
@@ -39,7 +46,13 @@ public class BudgetService {
 
         Maintenance maintenance = maintenanceRepository.findById(budgetRequest.getMaintenanceId())
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + budgetRequest.getMaintenanceId()));
+
         budget.setMaintenance(maintenance);
+
+        budgetedMaintenance(budgetRequest.getMaintenanceId());
+
+        //Da para separar isso em uma funcao privada do bugdetService e criar todo uma estrutura para DTO e no MaintenanceResponsibleService somente passar o DTO e um create basico
+        maintenanceResponsibleService.startFirstBudget(authService.getEmployee().getId());
 
         Budget savedBudget = budgetRepository.save(budget);
         return mapToResponse(savedBudget);
@@ -68,6 +81,7 @@ public class BudgetService {
         return mapToResponse(updatedBudget);
     }
 
+    //Muda o estado do orcamento para rejeitado
     public void deleteBudget(Long id) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
@@ -75,25 +89,29 @@ public class BudgetService {
         budgetRepository.save(budget);
     }
 
+    //Apos ser aprovada muda o estado da manutencao e torna ativo o responsavel criado na primeira
     public BudgetResponse approveBudget(Long id) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
 
         budget.setDataRecuperacao(LocalDateTime.now());
         budgetRepository.save(budget);
+
         approveMaintenance(budget.getMaintenance().getId());
-        
+
         return mapToResponse(budget);
     }
 
+    //Apos ser rejeitado somente muda estado nao mexe em mais nada
     public BudgetResponse rejectBudget(Long id, String justificativaRejeicao) {
         Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
 
         budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
-        budgetRepository.save(budget);
         rejectMaintenance(budget.getMaintenance().getId());
+
+        budgetRepository.save(budget);
         return mapToResponse(budget);
     }
 
@@ -111,15 +129,26 @@ public class BudgetService {
         return response;
     }
 
+    //Muda o estado da manutencao que esta associada ao orcamento para rejeitada
     private void rejectMaintenance(Long id) {
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
         maintenanceRequest.setStatus(StatusEnum.REJEITADA);
         maintenanceService.updateMaintenance(id, maintenanceRequest);
     }
 
+    //Muda o estado da manutencao que esta associada ao orcamento para aprovada
     private void approveMaintenance(Long id) {
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
         maintenanceRequest.setStatus(StatusEnum.APROVADA);
         maintenanceService.updateMaintenance(id, maintenanceRequest);
     }
+
+    //Muda o estado da manutencao que esta associada ao orcamento para orcada
+    private void budgetedMaintenance(Long id) {
+        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
+        maintenanceRequest.setStatus(StatusEnum.ORCADA);
+        maintenanceService.updateMaintenance(id, maintenanceRequest);
+    }
+
+
 }

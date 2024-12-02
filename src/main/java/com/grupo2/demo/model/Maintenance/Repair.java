@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Repair {
@@ -20,6 +22,10 @@ public class Repair {
     private String descricao_conserto;
     @Column(nullable = false)
     private String orientacao_cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_responsivelManutencao", nullable = false)
+    private MaintenanceResponsible responsavelManutencao;
 
     public Repair() {}
 
@@ -55,6 +61,12 @@ public class Repair {
         this.orientacao_cliente = orientacao_cliente;
     }
 
-    
+    public MaintenanceResponsible getResponsavelManutencao() {
+        return responsavelManutencao;
+    }
+
+    public void setResponsavelManutencao(MaintenanceResponsible responsavelManutencao) {
+        this.responsavelManutencao = responsavelManutencao;
+    }
 
 }

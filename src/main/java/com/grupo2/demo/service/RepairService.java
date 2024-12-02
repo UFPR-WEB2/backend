@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.RepairRequest;
 import com.grupo2.demo.dto.RepairResponse;
+import com.grupo2.demo.model.Maintenance.MaintenanceResponsible;
 import com.grupo2.demo.model.Maintenance.Repair;
 import com.grupo2.demo.repository.RepairRepository;
 
@@ -17,11 +18,13 @@ public class RepairService {
     @Autowired
     private RepairRepository repairRepository;
 
-    public RepairResponse createRepair(RepairRequest repairRequest) {
+    public RepairResponse createRepair(MaintenanceResponsible maintenanceResponsible, RepairRequest repairRequest) {
         Repair repair = new Repair();
+        
         repair.setData_conserto(repairRequest.getDataConserto());
         repair.setDescricao_conserto(repairRequest.getDescricaoConserto());
         repair.setOrientacao_cliente(repairRequest.getOrientacaoCliente());
+        repair.setResponsavelManutencao(maintenanceResponsible);
 
         Repair savedRepair = repairRepository.save(repair);
         return mapToResponse(savedRepair);

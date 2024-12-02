@@ -103,6 +103,10 @@ public class AuthService {
     public Customer getCustomer() {
         return (Customer) session.getAttribute("user");
     }
+
+    public Employee getEmployee() {
+        return (Employee) session.getAttribute("user");
+    }
     
     public void logout() {
         session.invalidate();

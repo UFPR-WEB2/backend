@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.grupo2.demo.config.StatusEnum;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
-import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.exception.BudgetNotFoundException;
 import com.grupo2.demo.exception.MaintenanceNotFoundException;
 import com.grupo2.demo.model.Maintenance.Budget;
@@ -49,9 +48,7 @@ public class BudgetService {
 
         budget.setMaintenance(maintenance);
 
-        budgetedMaintenance(budgetRequest.getMaintenanceId());
-
-        //Da para separar isso em uma funcao privada do bugdetService e criar todo uma estrutura para DTO e no MaintenanceResponsibleService somente passar o DTO e um create basico
+        maintenanceService.changeStateMaintenance(budgetRequest.getMaintenanceId(), StatusEnum.ORCADA);
         maintenanceResponsibleService.startFirstBudget(authService.getEmployee().getId(), maintenance);
 
         Budget savedBudget = budgetRepository.save(budget);
@@ -97,7 +94,7 @@ public class BudgetService {
         budget.setDataRecuperacao(LocalDateTime.now());
         budgetRepository.save(budget);
 
-        approveMaintenance(budget.getMaintenance().getId());
+        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.APROVADA);
 
         return mapToResponse(budget);
     }
@@ -109,7 +106,21 @@ public class BudgetService {
 
         budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
-        rejectMaintenance(budget.getMaintenance().getId());
+
+        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.REJEITADA);
+
+        budgetRepository.save(budget);
+        return mapToResponse(budget);
+    }
+
+    public BudgetResponse redeemBudget(Long id) {
+        Budget budget = budgetRepository.findById(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
+
+        budget.setStatus(true);
+        budget.setDataRecuperacao(LocalDateTime.now());
+
+        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.APROVADA);
 
         budgetRepository.save(budget);
         return mapToResponse(budget);
@@ -128,27 +139,5 @@ public class BudgetService {
 
         return response;
     }
-
-    //Muda o estado da manutencao que esta associada ao orcamento para rejeitada
-    private void rejectMaintenance(Long id) {
-        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
-        maintenanceRequest.setStatus(StatusEnum.REJEITADA);
-        maintenanceService.updateMaintenance(id, maintenanceRequest);
-    }
-
-    //Muda o estado da manutencao que esta associada ao orcamento para aprovada
-    private void approveMaintenance(Long id) {
-        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
-        maintenanceRequest.setStatus(StatusEnum.APROVADA);
-        maintenanceService.updateMaintenance(id, maintenanceRequest);
-    }
-
-    //Muda o estado da manutencao que esta associada ao orcamento para orcada
-    private void budgetedMaintenance(Long id) {
-        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
-        maintenanceRequest.setStatus(StatusEnum.ORCADA);
-        maintenanceService.updateMaintenance(id, maintenanceRequest);
-    }
-
 
 }

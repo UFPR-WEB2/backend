@@ -1,10 +1,10 @@
 package com.grupo2.demo.dto;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class RepairResponse {
     private Long id;
-    private LocalDate dataConserto;
+    private LocalDateTime dataConserto;
     private String descricaoConserto;
     private String orientacaoCliente;
 
@@ -16,11 +16,11 @@ public class RepairResponse {
         this.id = id;
     }
 
-    public LocalDate getDataConserto() {
+    public LocalDateTime getDataConserto() {
         return dataConserto;
     }
 
-    public void setDataConserto(LocalDate dataConserto) {
+    public void setDataConserto(LocalDateTime dataConserto) {
         this.dataConserto = dataConserto;
     }
 

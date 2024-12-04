@@ -1,26 +1,27 @@
 package com.grupo2.demo.dto;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 public class RepairRequest {
-    private LocalDate dataConserto;
+    private LocalDateTime dataConserto;
     private String descricaoConserto;
     private String orientacaoCliente;
 
     public RepairRequest() {
     }
 
-    public RepairRequest(LocalDate dataConserto, String descricaoConserto, String orientacaoCliente) {
+    public RepairRequest(LocalDateTime dataConserto, String descricaoConserto, String orientacaoCliente) {
         this.dataConserto = dataConserto;
         this.descricaoConserto = descricaoConserto;
         this.orientacaoCliente = orientacaoCliente;
     }
 
-    public LocalDate getDataConserto() {
+    public LocalDateTime getDataConserto() {
         return dataConserto;
     }
 
-    public void setDataConserto(LocalDate dataConserto) {
+    public void setDataConserto(LocalDateTime dataConserto) {
         this.dataConserto = dataConserto;
     }
 

@@ -139,4 +139,11 @@ public class MaintenanceService {
 
         return response;
     }
+
+    public void changeStateMaintenance(Long id, StatusEnum status) {
+        MaintenanceRequest maintenanceRequest = new MaintenanceRequest();
+        maintenanceRequest.setStatus(status);
+        updateMaintenance(id, maintenanceRequest);
+    }
+
 }

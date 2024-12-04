@@ -3,6 +3,8 @@ package com.grupo2.demo.dto;
 import com.grupo2.demo.config.StatusEnum;
 
 public class MaintenanceRequest {
+
+    private Long id;
     private String descricaoEquipamento;
     private String descricaoDefeito;
     private String nomeCategoria;
@@ -39,6 +41,14 @@ public class MaintenanceRequest {
 
     public void setStatus(StatusEnum status) {
         this.status = status;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }

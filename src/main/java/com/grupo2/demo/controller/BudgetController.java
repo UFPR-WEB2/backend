@@ -3,10 +3,13 @@ package com.grupo2.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.grupo2.demo.dto.BudgetApproveRequest;
+import com.grupo2.demo.dto.BudgetRejectRequest;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
-import com.grupo2.demo.dto.RejectBudgetRequest;
 import com.grupo2.demo.service.BudgetService;
+
 import java.util.List;
 
 @RestController
@@ -47,15 +50,16 @@ public class BudgetController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{id}/aprovar")
-    public ResponseEntity<BudgetResponse> aprovarOrcamento(@PathVariable Long id) {
-        BudgetResponse budgetResponse = budgetService.approveBudget(id);
+    @PostMapping("/aprovar")
+    public ResponseEntity<BudgetResponse> aprovarOrcamento(@RequestBody BudgetApproveRequest approveRequest) {
+        BudgetResponse budgetResponse = budgetService.approveBudget(approveRequest.getId());
         return ResponseEntity.ok(budgetResponse);
     }
 
-    @PostMapping("/{id}/rejeitar")
-    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@PathVariable Long id, @RequestBody RejectBudgetRequest rejectRequest) {
-        BudgetResponse budgetResponse = budgetService.rejectBudget(id, rejectRequest.getJustificativaRejeicao());
+    @PostMapping("/rejeitar")
+    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@RequestBody BudgetRejectRequest rejectRequest) {
+        BudgetResponse budgetResponse = budgetService.rejectBudget(rejectRequest.getId(),
+                rejectRequest.getJustificativaRejeicao());
         return ResponseEntity.ok(budgetResponse);
     }
 }

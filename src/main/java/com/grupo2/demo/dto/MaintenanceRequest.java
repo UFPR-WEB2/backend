@@ -10,7 +10,6 @@ public class MaintenanceRequest {
     private String nomeCategoria;
     private StatusEnum status;
 
-
     public String getDescricaoEquipamento() {
         return descricaoEquipamento;
     }

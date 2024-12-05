@@ -3,6 +3,7 @@ package com.grupo2.demo.dto;
 import com.grupo2.demo.model.User.User;
 
 public class AuthResponse {
+    private Long id;
     private String name;
     private String emai;
     private Boolean active;
@@ -52,5 +53,13 @@ public class AuthResponse {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 }

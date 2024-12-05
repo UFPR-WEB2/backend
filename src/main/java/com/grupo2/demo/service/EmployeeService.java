@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grupo2.demo.dto.AuthResponse;
+import com.grupo2.demo.service.AuthService;
 import com.grupo2.demo.dto.EmployeeRequest;
 import com.grupo2.demo.dto.EmployeeResponse;
 import com.grupo2.demo.model.User.Employee;
@@ -17,6 +19,12 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    private final AuthService authService;
+
+    public EmployeeService(EmployeeRepository employeeRepository, AuthService authService) {
+        this.employeeRepository = employeeRepository;
+        this.authService = authService;
+    }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         // ADD: Camada de validacao
@@ -77,6 +85,16 @@ public class EmployeeService {
     }
 
     public void deleteEmployee(Long id) {
+        // Obtém o usuário ativo da sessão
+        AuthResponse authResponse = authService.getSession();
+        Long activeUserId = authResponse != null ? authResponse.getId() : null;
+
+        // Verifica se o ID do usuário ativo é igual ao ID do funcionário que está sendo
+        // excluído
+        if (activeUserId != null && activeUserId.equals(id)) {
+            throw new RuntimeException("Você não pode excluir seu próprio usuário.");
+        }
+
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
 

@@ -70,32 +70,33 @@ public class AuthService {
         if (session.getAttribute("user") == null) {
             return null;
         }
-        Object user = session.getAttribute("user");
+        Employee user = (Employee) session.getAttribute("user"); // Cast para Employee
         String role = (String) session.getAttribute("role");
         AuthResponse authResponse = new AuthResponse();
         authResponse.setUser(user);
+        authResponse.setId(user.getId()); // Chama getId() no objeto Employee
         authResponse.setRole(role);
         return authResponse;
     }
 
-    //QUANDO ARRUMAR O ERRO DE AUTHORIZATION, DESCOMENTAR ESSES MÉTODOS!!
+    // QUANDO ARRUMAR O ERRO DE AUTHORIZATION, DESCOMENTAR ESSES MÉTODOS!!
 
     public void checkEmployeeAuth() {
         checkAuth();
         // if(getSession().getRole().equals("CUSTOMER") ) {
-        //     throw new ForbiddenException("Usuário não autorizado");
+        // throw new ForbiddenException("Usuário não autorizado");
         // }
     }
 
     public void checkCustomerAuth() {
         checkAuth();
         // if(getSession().getRole().equals("EMPLOYEE")) {
-        //     throw new ForbiddenException("Usuário não autorizado");
+        // throw new ForbiddenException("Usuário não autorizado");
         // }
     }
 
     public void checkAuth() {
-        if(getSession() == null) {
+        if (getSession() == null) {
             throw new UnauthorizedException("Usuário não autenticado, faça login para continuar");
         }
     }
@@ -107,9 +108,9 @@ public class AuthService {
     public Employee getEmployee() {
         return (Employee) session.getAttribute("user");
     }
-    
+
     public void logout() {
         session.invalidate();
     }
-    
+
 }

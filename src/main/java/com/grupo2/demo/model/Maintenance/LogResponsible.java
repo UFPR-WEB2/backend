@@ -21,7 +21,7 @@ public class LogResponsible {
     private Long id;
 
     @Column(nullable = true)
-    private LocalDateTime data_redirecionamento;
+    private LocalDateTime dataRedirecionamento;
 
     @ManyToOne
     @JoinColumn(name = "id_funcionario", nullable = false)
@@ -40,11 +40,11 @@ public class LogResponsible {
     }
 
     public LocalDateTime getData_redirecionamento() {
-        return data_redirecionamento;
+        return dataRedirecionamento;
     }
 
-    public void setData_redirecionamento(LocalDateTime data_redirecionamento) {
-        this.data_redirecionamento = data_redirecionamento;
+    public void setData_redirecionamento(LocalDateTime dataRedirecionamento) {
+        this.dataRedirecionamento = dataRedirecionamento;
     }
 
     public Employee getFuncionario() {

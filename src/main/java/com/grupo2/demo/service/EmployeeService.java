@@ -10,6 +10,7 @@ import com.grupo2.demo.dto.EmployeeRequest;
 import com.grupo2.demo.dto.EmployeeResponse;
 import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.EmployeeRepository;
+import com.grupo2.demo.utils.PasswordGenerator;
 
 @Service
 public class EmployeeService {
@@ -20,7 +21,14 @@ public class EmployeeService {
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         // ADD: Camada de validacao
         Employee employee = employeeRequest.toEmployee();
+        String plainPassword = PasswordGenerator.generatePassword();
+        String salt = PasswordGenerator.generateSalt();
+        String hashedPassword = PasswordGenerator.hashPassword(plainPassword, salt);
+        
+        employee.setPassword(hashedPassword);
+        employee.setSalt(salt);
         employee.setAtivo(true);
+        employee.setDataNascimento(employeeRequest.getDataNascimento());
         Employee savedEmployee = employeeRepository.save(employee);
         return mapToResponse(savedEmployee);
     }

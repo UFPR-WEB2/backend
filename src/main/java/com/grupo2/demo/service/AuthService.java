@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.AuthResponse;
 import com.grupo2.demo.exception.UnauthorizedException;
-import com.grupo2.demo.exception.ForbiddenException;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.CustomerRepository;
@@ -35,6 +34,7 @@ public class AuthService {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
                 setUserSession(customer, "CUSTOMER");
+                System.out.print(session.getAttribute("role"));
                 authResponse.setUser(customer);
                 authResponse.setRole("CUSTOMER");
                 return authResponse;
@@ -59,6 +59,7 @@ public class AuthService {
     private void setUserSession(Object user, String role) {
         session.setAttribute("user", user);
         session.setAttribute("role", role);
+        System.out.print(session);
     }
 
     private boolean checkPassword(String inputPassword, String storedPassword, String salt) {
@@ -70,14 +71,27 @@ public class AuthService {
         if (session.getAttribute("user") == null) {
             return null;
         }
-        Employee user = (Employee) session.getAttribute("user"); // Cast para Employee
+    
+        // Obtém a role da sessão
         String role = (String) session.getAttribute("role");
         AuthResponse authResponse = new AuthResponse();
-        authResponse.setUser(user);
-        authResponse.setId(user.getId()); // Chama getId() no objeto Employee
+    
+        if ("CUSTOMER".equals(role)) {
+            Customer user = (Customer) session.getAttribute("user");
+            authResponse.setUser(user);
+            authResponse.setId(user.getId());
+        } else if ("EMPLOYEE".equals(role)) {
+            Employee user = (Employee) session.getAttribute("user");
+            authResponse.setUser(user);
+            authResponse.setId(user.getId());
+        } else {
+            return null;
+        }
+    
         authResponse.setRole(role);
         return authResponse;
     }
+    
 
     // QUANDO ARRUMAR O ERRO DE AUTHORIZATION, DESCOMENTAR ESSES MÉTODOS!!
 

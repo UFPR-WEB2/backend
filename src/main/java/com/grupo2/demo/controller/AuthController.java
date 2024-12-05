@@ -38,4 +38,11 @@ public class AuthController {
         return ResponseEntity.status(Response.SC_UNAUTHORIZED).build();
     }
 
+    @SuppressWarnings("rawtypes")
+    @PostMapping("/logout")
+    public ResponseEntity logout() {
+        authService.logout();
+        return ResponseEntity.ok().build();
+    }
+
 }

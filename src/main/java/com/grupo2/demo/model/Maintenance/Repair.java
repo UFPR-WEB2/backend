@@ -1,12 +1,15 @@
 package com.grupo2.demo.model.Maintenance;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Repair {
@@ -15,11 +18,15 @@ public class Repair {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private LocalDate data_conserto;
+    private LocalDateTime data_conserto;
     @Column(nullable = false)
     private String descricao_conserto;
     @Column(nullable = false)
     private String orientacao_cliente;
+
+    @ManyToOne
+    @JoinColumn(name = "id_responsivelManutencao", nullable = false)
+    private MaintenanceResponsible responsavelManutencao;
 
     public Repair() {}
 
@@ -31,11 +38,11 @@ public class Repair {
         this.id = id;
     }
 
-    public LocalDate getData_conserto() {
+    public LocalDateTime getData_conserto() {
         return data_conserto;
     }
 
-    public void setData_conserto(LocalDate data_conserto) {
+    public void setData_conserto(LocalDateTime data_conserto) {
         this.data_conserto = data_conserto;
     }
 
@@ -55,6 +62,12 @@ public class Repair {
         this.orientacao_cliente = orientacao_cliente;
     }
 
-    
+    public MaintenanceResponsible getResponsavelManutencao() {
+        return responsavelManutencao;
+    }
+
+    public void setResponsavelManutencao(MaintenanceResponsible responsavelManutencao) {
+        this.responsavelManutencao = responsavelManutencao;
+    }
 
 }

@@ -1,7 +1,7 @@
 package com.grupo2.demo.model.Maintenance;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,22 +21,24 @@ public class Budget {
     private BigDecimal precoOrcado;
 
     @Column(nullable = false)
-    private String descricao;
+    private LocalDateTime dataOrcamento;
+
+    @Column(nullable = true)
+    private String justificativaRejeicao;
+
+    @Column(nullable = true)
+    private LocalDateTime dataRejeicao;
+
+    @Column(nullable = true)
+    private LocalDateTime dataRecuperacao;
 
     @Column(nullable = false)
-    private LocalDate dataCriacao;
-
-    @Column(nullable = false)
-    private LocalDate dataAtualizacao;
-
-    @Column(nullable = false)
-    private String categoria;
+    private Boolean status;
 
     @ManyToOne
     @JoinColumn(name = "id_manutencao", nullable = false)
     private Maintenance maintenance;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -53,36 +55,44 @@ public class Budget {
         this.precoOrcado = precoOrcado;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public LocalDateTime getDataOrcamento() {
+        return dataOrcamento;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDataOrcamento(LocalDateTime dataOrcamento) {
+        this.dataOrcamento = dataOrcamento;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getJustificativaRejeicao() {
+        return justificativaRejeicao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public void setJustificativaRejeicao(String justificativaRejeicao) {
+        this.justificativaRejeicao = justificativaRejeicao;
     }
 
-    public LocalDate getDataAtualizacao() {
-        return dataAtualizacao;
+    public LocalDateTime getDataRejeicao() {
+        return dataRejeicao;
     }
 
-    public void setDataAtualizacao(LocalDate dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
+    public void setDataRejeicao(LocalDateTime dataRejeicao) {
+        this.dataRejeicao = dataRejeicao;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public LocalDateTime getDataRecuperacao() {
+        return dataRecuperacao;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public void setDataRecuperacao(LocalDateTime dataRecuperacao) {
+        this.dataRecuperacao = dataRecuperacao;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Maintenance getMaintenance() {
@@ -93,5 +103,4 @@ public class Budget {
         this.maintenance = maintenance;
     }
 
-    
 }

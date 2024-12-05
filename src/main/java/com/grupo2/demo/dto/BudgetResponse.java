@@ -1,34 +1,25 @@
 package com.grupo2.demo.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class BudgetResponse {
     private Long id;
     private BigDecimal precoOrcado;
-    private String descricao;
-    private LocalDate dataCriacao;
-    private LocalDate dataAtualizacao;
-    private String categoria;
+    private LocalDateTime dataOrcamento;
+    private String justificativaRejeicao;
+    private LocalDateTime dataRejeicao;
+    private LocalDateTime dataRecuperacao;
+    private Boolean status;
+    private Long maintenanceId;
 
     public BudgetResponse() {
     }
 
-    public BudgetResponse(Long id, BigDecimal precoOrcado, String descricao, LocalDate dataCriacao, LocalDate dataAtualizacao, String categoria) {
-        this.id = id;
-        this.precoOrcado = precoOrcado;
-        this.descricao = descricao;
-        this.dataCriacao = dataCriacao;
-        this.dataAtualizacao = dataAtualizacao;
-        this.categoria = categoria;
-    }
+    // Getters e Setters
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public BigDecimal getPrecoOrcado() {
@@ -39,35 +30,55 @@ public class BudgetResponse {
         this.precoOrcado = precoOrcado;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public LocalDateTime getDataOrcamento() {
+        return dataOrcamento;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public void setDataOrcamento(LocalDateTime dataOrcamento) {
+        this.dataOrcamento = dataOrcamento;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = dataCriacao;
+    public String getJustificativaRejeicao() {
+        return justificativaRejeicao;
     }
 
-    public LocalDate getDataAtualizacao() {
-        return dataAtualizacao;
+    public void setJustificativaRejeicao(String justificativaRejeicao) {
+        this.justificativaRejeicao = justificativaRejeicao;
     }
 
-    public void setDataAtualizacao(LocalDate dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
+    public LocalDateTime getDataRejeicao() {
+        return dataRejeicao;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public void setDataRejeicao(LocalDateTime dataRejeicao) {
+        this.dataRejeicao = dataRejeicao;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public LocalDateTime getDataRecuperacao() {
+        return dataRecuperacao;
+    }
+
+    public void setDataRecuperacao(LocalDateTime dataRecuperacao) {
+        this.dataRecuperacao = dataRecuperacao;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
+    }
+
+    public Long getMaintenanceId() {
+        return maintenanceId;
+    }
+
+    public void setMaintenanceId(Long maintenanceId) {
+        this.maintenanceId = maintenanceId;
     }
 }

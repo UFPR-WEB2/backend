@@ -18,11 +18,6 @@ public class RepairController {
     @Autowired
     private RepairService repairService;
 
-    @PostMapping
-    public RepairResponse createRepair(@RequestBody RepairRequest repairRequest) {
-        return repairService.createRepair(repairRequest);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<RepairResponse> getRepairById(@PathVariable Long id) {
         RepairResponse repair = repairService.getRepairById(id);

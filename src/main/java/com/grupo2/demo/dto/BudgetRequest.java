@@ -4,16 +4,14 @@ import java.math.BigDecimal;
 
 public class BudgetRequest {
     private BigDecimal precoOrcado;
-    private String descricao;
-    private String categoria;
+    private Long maintenanceId;
 
     public BudgetRequest() {
     }
 
-    public BudgetRequest(BigDecimal precoOrcado, String descricao, String categoria) {
+    public BudgetRequest(BigDecimal precoOrcado, Long maintenanceId) {
         this.precoOrcado = precoOrcado;
-        this.descricao = descricao;
-        this.categoria = categoria;
+        this.maintenanceId = maintenanceId;
     }
 
     public BigDecimal getPrecoOrcado() {
@@ -24,19 +22,11 @@ public class BudgetRequest {
         this.precoOrcado = precoOrcado;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public Long getMaintenanceId() {
+        return maintenanceId;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setMaintenanceId(Long maintenanceId) {
+        this.maintenanceId = maintenanceId;
     }
 }

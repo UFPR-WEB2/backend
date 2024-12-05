@@ -12,9 +12,13 @@ public class MaintenanceResponse {
     private String descricaoDefeito;
     private LocalDateTime dataCriacao;
     private LocalDateTime dataFinalizacao;
+    private LocalDateTime dataConserto;
     private String nomeCategoria;
     private StatusEnum nomeStatus;
     private String nomeCliente;
+    private String nomeFuncionario;
+    private String descricaoConserto;
+    private String orientacaoCliente;
 
     // Getters e Setters
     public Long getId() {
@@ -80,4 +84,37 @@ public class MaintenanceResponse {
     public void setNomeCliente(String nomeCliente) {
         this.nomeCliente = nomeCliente;
     }
+
+    public String getNomeFuncionario() {
+        return nomeFuncionario;
+    }
+
+    public void setNomeFuncionario(String nomeFuncionario) {
+        this.nomeFuncionario = nomeFuncionario;
+    }
+
+    public String getDescricaoConserto() {
+        return descricaoConserto;
+    }
+
+    public void setDescricaoConserto(String descricaoConserto) {
+        this.descricaoConserto = descricaoConserto;
+    }
+
+    public String getOrientacaoCliente() {
+        return orientacaoCliente;
+    }
+
+    public void setOrientacaoCliente(String orientacaoCliente) {
+        this.orientacaoCliente = orientacaoCliente;
+    }
+
+    public LocalDateTime getDataConserto() {
+        return dataConserto;
+    }
+
+    public void setDataConserto(LocalDateTime dataConserto) {
+        this.dataConserto = dataConserto;
+    }
+    
 }

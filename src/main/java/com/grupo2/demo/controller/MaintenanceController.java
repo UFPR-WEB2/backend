@@ -11,6 +11,8 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 @RestController
@@ -55,4 +57,13 @@ public class MaintenanceController {
         maintenanceService.deleteMaintenance(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/finish")
+    public ResponseEntity<MaintenanceResponse> postMethodName(@RequestBody MaintenanceRequest maintenanceRequest) {
+
+        MaintenanceResponse maintenanceResponse = maintenanceService.finishMaintenance(maintenanceRequest.getId());
+        
+        return ResponseEntity.ok(maintenanceResponse);
+    }
+    
 }

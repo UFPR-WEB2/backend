@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import com.grupo2.demo.dto.AuthResponse;
 import com.grupo2.demo.dto.EmployeeRequest;
 import com.grupo2.demo.dto.EmployeeResponse;
+import com.grupo2.demo.exception.CategoryNotFoundException;
+import com.grupo2.demo.exception.EmployeeNullException;
+import com.grupo2.demo.exception.EmployeeSelfDeleteException;
 import com.grupo2.demo.model.User.Employee;
 import com.grupo2.demo.repository.EmployeeRepository;
 import com.grupo2.demo.utils.PasswordGenerator;
@@ -30,8 +33,15 @@ public class EmployeeService {
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         authService.checkEmployeeAuth();
 
+        if(employeeRequest.getNome() == null || employeeRequest.getNome().isEmpty() ||
+                employeeRequest.getEmail() == null || employeeRequest.getEmail().isEmpty() ||
+                employeeRequest.getSenha() == null || employeeRequest.getSenha().isEmpty()  ||
+                employeeRequest.getDataNascimento() == null) {
+            throw new EmployeeNullException("Verifique se os campos estao preenchidos");
+        }
+
         Employee employee = employeeRequest.toEmployee();
-        String plainPassword = PasswordGenerator.generatePassword();
+        String plainPassword = employeeRequest.getSenha();
         String salt = PasswordGenerator.generateSalt();
         String hashedPassword = PasswordGenerator.hashPassword(plainPassword, salt);
         
@@ -45,7 +55,7 @@ public class EmployeeService {
 
     public EmployeeResponse getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Funcionário não encontrado com id: " + id));
         return mapToResponse(employee);
     }
 
@@ -70,12 +80,23 @@ public class EmployeeService {
     }
 
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest employeeRequest) {
+        authService.checkEmployeeAuth();
         // ADD: camada de validacao
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Funcionário não encontrado com id: " + id));
+        
+        if(employeeRequest.getSenha() != null && !employeeRequest.getSenha().isEmpty()) {
+            String plainPassword = employeeRequest.getSenha();
+            String salt = PasswordGenerator.generateSalt();
+            String hashedPassword = PasswordGenerator.hashPassword(plainPassword, salt);
+            employee.setPassword(hashedPassword);
+            employee.setSalt(salt);
+        }
+
         employee.setNome(employeeRequest.getNome());
         employee.setEmail(employeeRequest.getEmail());
         employee.setDataNascimento(employeeRequest.getDataNascimento());
+
         Employee updatedEmployee = employeeRepository.save(employee);
         return mapToResponse(updatedEmployee);
     }
@@ -88,11 +109,11 @@ public class EmployeeService {
         // Verifica se o ID do usuário ativo é igual ao ID do funcionário que está sendo
         // excluído
         if (activeUserId != null && activeUserId.equals(id)) {
-            throw new RuntimeException("Você não pode excluir seu próprio usuário.");
+            throw new EmployeeSelfDeleteException("Você não pode excluir seu próprio usuário.");
         }
 
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
+                .orElseThrow(() -> new CategoryNotFoundException("Funcionário não encontrado com id: " + id));
 
         employee.setAtivo(false);
         employeeRepository.save(employee);

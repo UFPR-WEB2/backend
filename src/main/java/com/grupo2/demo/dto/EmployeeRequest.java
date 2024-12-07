@@ -7,16 +7,16 @@ import com.grupo2.demo.model.User.Employee;
 public class EmployeeRequest {
     private String nome;
     private String email;
-    private String password;
+    private String senha;
     private LocalDate dataNascimento;
 
     public EmployeeRequest() {
     }
 
-    public EmployeeRequest(String nome, String email, String password, LocalDate dataNascimento) {
+    public EmployeeRequest(String nome, String email, String senha, LocalDate dataNascimento) {
         this.nome = nome;
         this.email = email;
-        this.password = password;
+        this.senha = senha;
         this.dataNascimento = dataNascimento;
     }
 
@@ -24,7 +24,7 @@ public class EmployeeRequest {
         Employee user = new Employee();
         user.setNome(this.nome);
         user.setEmail(this.email);
-        user.setPassword(this.password);
+        user.setPassword(this.senha);
         user.setDataNascimento(this.dataNascimento);
         return user;
     }
@@ -45,12 +45,12 @@ public class EmployeeRequest {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getSenha() {
+        return senha;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 
     public LocalDate getDataNascimento() {

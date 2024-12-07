@@ -45,8 +45,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeResponse> updateEmployer(@PathVariable Long id,
-            @RequestBody EmployeeRequest employerRequest) {
+    public ResponseEntity<EmployeeResponse> updateEmployer(@PathVariable Long id, @RequestBody EmployeeRequest employerRequest) {
         try {
             EmployeeResponse updatedEmployer = employeeService.updateEmployee(id, employerRequest);
             return ResponseEntity.ok(updatedEmployer);
@@ -56,12 +55,8 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deactivateEmployer(@PathVariable Long id) {
-        try {
-            employeeService.deleteEmployee(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<EmployeeResponse> deactivateEmployer(@PathVariable Long id) {
+        employeeService.deleteEmployee(id);
+        return ResponseEntity.ok().build();
     }
 }

@@ -35,7 +35,6 @@ public class AuthService {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
                 setUserSession(customer, "CUSTOMER");
-                System.out.print(session.getAttribute("role"));
                 authResponse.setUser(customer);
                 authResponse.setRole("CUSTOMER");
                 return authResponse;

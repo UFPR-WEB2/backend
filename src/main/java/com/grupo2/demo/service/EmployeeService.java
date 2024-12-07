@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.AuthResponse;
-import com.grupo2.demo.service.AuthService;
 import com.grupo2.demo.dto.EmployeeRequest;
 import com.grupo2.demo.dto.EmployeeResponse;
 import com.grupo2.demo.model.User.Employee;
@@ -19,7 +18,9 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-    private final AuthService authService;
+
+    @Autowired
+    private AuthService authService;
 
     public EmployeeService(EmployeeRepository employeeRepository, AuthService authService) {
         this.employeeRepository = employeeRepository;
@@ -27,7 +28,8 @@ public class EmployeeService {
     }
 
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
-        // ADD: Camada de validacao
+        authService.checkEmployeeAuth();
+
         Employee employee = employeeRequest.toEmployee();
         String plainPassword = PasswordGenerator.generatePassword();
         String salt = PasswordGenerator.generateSalt();
@@ -45,12 +47,6 @@ public class EmployeeService {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
         return mapToResponse(employee);
-    }
-
-    public Employee getEmployeeById2(Long id) {
-        Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
-        return employee;
     }
 
     public EmployeeResponse getEmployeeByName(String nome) {
@@ -110,5 +106,13 @@ public class EmployeeService {
         response.setDataNascimento(employee.getDataNascimento());
         response.setAtivo(employee.isAtivo());
         return response;
+    }
+
+    //----------Metodos para ser utilizado em outras classes e servicos----------//
+
+    public Employee getEmployeeById2(Long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado com id: " + id));
+        return employee;
     }
 }

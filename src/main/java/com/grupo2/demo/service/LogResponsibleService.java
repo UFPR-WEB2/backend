@@ -27,6 +27,6 @@ public class LogResponsibleService {
     }
 
     public LogResponsible lastResponsible(MaintenanceResponsible maintenanceResponsible) {
-        return logResponsibleRepository. findTopByManutencaoResponsavelOrderByDataRedirecionamentoDesc(maintenanceResponsible);
+        return logResponsibleRepository.findTopByManutencaoResponsavelOrderByDataRedirecionamentoDesc(maintenanceResponsible);
     }
 }

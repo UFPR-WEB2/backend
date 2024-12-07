@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupo2.demo.dto.AuthResponse;
+import com.grupo2.demo.exception.ForbiddenException;
 import com.grupo2.demo.exception.UnauthorizedException;
 import com.grupo2.demo.model.User.Customer;
 import com.grupo2.demo.model.User.Employee;
@@ -95,16 +96,16 @@ public class AuthService {
 
     public void checkEmployeeAuth() {
         checkAuth();
-        // if(getSession().getRole().equals("CUSTOMER") ) {
-        // throw new ForbiddenException("Usuário não autorizado");
-        // }
+        if(getSession().getRole().equals("CUSTOMER") ) {
+            throw new ForbiddenException("Usuário não autorizado");
+        }
     }
 
     public void checkCustomerAuth() {
         checkAuth();
-        // if(getSession().getRole().equals("EMPLOYEE")) {
-        // throw new ForbiddenException("Usuário não autorizado");
-        // }
+        if(getSession().getRole().equals("EMPLOYEE")) {
+            throw new ForbiddenException("Usuário não autorizado");
+        }
     }
 
     public void checkAuth() {

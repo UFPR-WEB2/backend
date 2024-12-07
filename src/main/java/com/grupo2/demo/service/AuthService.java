@@ -35,7 +35,6 @@ public class AuthService {
             Customer customer = customerOpt.get();
             if (checkPassword(password, customer.getPassword(), customer.getSalt())) {
                 setUserSession(customer, "CUSTOMER");
-                System.out.print(session.getAttribute("role"));
                 authResponse.setUser(customer);
                 authResponse.setRole("CUSTOMER");
                 return authResponse;
@@ -60,7 +59,6 @@ public class AuthService {
     private void setUserSession(Object user, String role) {
         session.setAttribute("user", user);
         session.setAttribute("role", role);
-        System.out.print(session);
     }
 
     private boolean checkPassword(String inputPassword, String storedPassword, String salt) {

@@ -59,7 +59,6 @@ public class AuthService {
     private void setUserSession(Object user, String role) {
         session.setAttribute("user", user);
         session.setAttribute("role", role);
-        System.out.print(session);
     }
 
     private boolean checkPassword(String inputPassword, String storedPassword, String salt) {

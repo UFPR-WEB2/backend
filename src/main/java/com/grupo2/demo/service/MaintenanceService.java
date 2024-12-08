@@ -127,6 +127,11 @@ public class MaintenanceService {
         return mapToResponse(updatedMaintenance);
     }
 
+    public List<MaintenanceResponse> getAllOpenMaintenances() {
+        List<Maintenance> maintenances = maintenanceRepository.findByStatusNomeStatus(StatusEnum.ABERTA);
+        return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public MaintenanceResponse finishMaintenance(Long id) {
         authService.checkAuth();
 
@@ -189,5 +194,6 @@ public class MaintenanceService {
 
         return mapToResponse(updatedMaintenance);
     }
+
 
 }

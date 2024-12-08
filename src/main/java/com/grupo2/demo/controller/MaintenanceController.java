@@ -46,15 +46,22 @@ public class MaintenanceController {
     }
 
     @GetMapping("/records")
-    public List<MaintenanceResponse> getMethodName() {
+    public List<MaintenanceResponse> userMaintenances() {
         return maintenanceService.getAllUserMaintenances();
     }
 
     @GetMapping("/records/{id}")
-    public MaintenanceResponse getMethodName(@PathVariable Long id) {
+    public MaintenanceResponse userMaintenancesById(@PathVariable Long id) {
         return maintenanceService.getUserMaintenanceById(id);
     }
-    
+
+    @GetMapping("/emAberto")
+    public ResponseEntity<List<MaintenanceResponse>> manutencoesEmAberto() {
+        List<MaintenanceResponse> response = maintenanceService.getAllOpenMaintenances();
+
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}")
     public MaintenanceResponse atualizarManutencao(@PathVariable Long id,
             @RequestBody MaintenanceRequest maintenanceRequest) {

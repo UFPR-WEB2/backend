@@ -94,8 +94,8 @@ public class BudgetService {
 
     //Apos ser aprovada muda o estado da manutencao e torna ativo o responsavel criado na primeira
     public BudgetResponse approveBudget(Long id) {
-        Budget budget = budgetRepository.findById(id)
-                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
+        Budget budget = budgetRepository.findByMaintenanceId(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
 
         budget.setDataRecuperacao(LocalDateTime.now());
         budgetRepository.save(budget);
@@ -107,8 +107,8 @@ public class BudgetService {
 
     //Apos ser rejeitado somente muda estado nao mexe em mais nada
     public BudgetResponse rejectBudget(Long id, String justificativaRejeicao) {
-        Budget budget = budgetRepository.findById(id)
-                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
+        Budget budget = budgetRepository.findByMaintenanceId(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
 
         budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
@@ -119,9 +119,11 @@ public class BudgetService {
         return mapToResponse(budget);
     }
 
+    //Apos ser rejeitado e aprovado
     public BudgetResponse redeemBudget(Long id) {
-        Budget budget = budgetRepository.findById(id)
-                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
+        Budget budget = budgetRepository.findByMaintenanceId(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
+
 
         budget.setStatus(true);
         budget.setDataRecuperacao(LocalDateTime.now());
@@ -145,5 +147,6 @@ public class BudgetService {
 
         return response;
     }
+
 
 }

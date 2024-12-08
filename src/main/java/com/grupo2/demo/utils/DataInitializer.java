@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -30,6 +31,9 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private MaintenanceRepository maintenanceRepository;
+
+    @Autowired
+    private BudgetRepository budgetRepository;
     
 
     @Override
@@ -108,8 +112,36 @@ public class DataInitializer implements CommandLineRunner {
         maintenance.setData_criacao(LocalDateTime.now());
         maintenance.setCliente(customer);
         maintenance.setCategoria(category);
-        maintenance.setStatus(statusRepository.findByNomeStatus(StatusEnum.ABERTA).orElseThrow());
+        maintenance.setStatus(statusRepository.findByNomeStatus(StatusEnum.REJEITADA).orElseThrow());
         maintenanceRepository.save(maintenance);
+
+        // Create Budget for Maintenance
+        Budget budget = new Budget();
+        budget.setPrecoOrcado(new BigDecimal("100.20"));
+        budget.setDataOrcamento(LocalDateTime.now());
+        budget.setStatus(true);
+        budget.setMaintenance(maintenance);
+        budgetRepository.save(budget);
+
+        // Create another 2 Maintenances in ABERTA status
+        Maintenance maintenance2 = new Maintenance();
+        maintenance2.setDescricao_equipamento("Notebook HP");
+        maintenance2.setDescricao_defeito("Tela quebrada");
+        maintenance2.setData_criacao(LocalDateTime.now());
+        maintenance2.setCliente(customer);
+        maintenance2.setCategoria(category);
+        maintenance2.setStatus(statusRepository.findByNomeStatus(StatusEnum.ABERTA).orElseThrow());
+        maintenanceRepository.save(maintenance2);
+
+        Maintenance maintenance3 = new Maintenance();
+        maintenance3.setDescricao_equipamento("Notebook Lenovo");
+        maintenance3.setDescricao_defeito("Teclado não funciona");
+        maintenance3.setData_criacao(LocalDateTime.now());
+        maintenance3.setCliente(customer);
+        maintenance3.setCategoria(category);
+        maintenance3.setStatus(statusRepository.findByNomeStatus(StatusEnum.ABERTA).orElseThrow());
+        maintenanceRepository.save(maintenance3);
+        
 
         System.out.println("Dados iniciais carregados com sucesso!");
     }

@@ -4,13 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.grupo2.demo.dto.BudgetApproveRequest;
 import com.grupo2.demo.dto.BudgetRejectRequest;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
 import com.grupo2.demo.service.BudgetService;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/orcamentos")
@@ -50,16 +52,21 @@ public class BudgetController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/aprovar")
-    public ResponseEntity<BudgetResponse> aprovarOrcamento(@RequestBody BudgetApproveRequest approveRequest) {
-        BudgetResponse budgetResponse = budgetService.approveBudget(approveRequest.getId());
+    @PutMapping("/aprovar/{id}")
+    public ResponseEntity<BudgetResponse> aprovarOrcamento(@PathVariable Long id) {
+        BudgetResponse budgetResponse = budgetService.approveBudget(id);
         return ResponseEntity.ok(budgetResponse);
     }
 
-    @PostMapping("/rejeitar")
-    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@RequestBody BudgetRejectRequest rejectRequest) {
-        BudgetResponse budgetResponse = budgetService.rejectBudget(rejectRequest.getId(),
-                rejectRequest.getJustificativaRejeicao());
+    @PutMapping("/rejeitar/{id}")
+    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@PathVariable Long id, @RequestBody BudgetRejectRequest rejectRequest) {
+        BudgetResponse budgetResponse = budgetService.rejectBudget(id, rejectRequest.getJustificativaRejeicao());
+        return ResponseEntity.ok(budgetResponse);
+    }
+
+    @PutMapping("/resgatar/{id}")
+    public ResponseEntity<BudgetResponse> resgatarOrcamento(@PathVariable Long id) {
+        BudgetResponse budgetResponse = budgetService.redeemBudget(id);
         return ResponseEntity.ok(budgetResponse);
     }
 

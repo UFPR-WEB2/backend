@@ -49,6 +49,11 @@ public class MaintenanceController {
     public List<MaintenanceResponse> getMethodName() {
         return maintenanceService.getAllUserMaintenances();
     }
+
+    @GetMapping("/records/{id}")
+    public MaintenanceResponse getMethodName(@PathVariable Long id) {
+        return maintenanceService.getUserMaintenanceById(id);
+    }
     
     @PutMapping("/{id}")
     public MaintenanceResponse atualizarManutencao(@PathVariable Long id,

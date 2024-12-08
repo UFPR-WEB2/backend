@@ -47,8 +47,9 @@ public class MaintenanceService {
                     "Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
         }
 
-        if(maintenanceRequest.getDescricaoDefeito().length() > 30)  {
-            throw new MaintenanceUnprocessableException("A descrição do equipamento não pode ter mais de 30 caracteres");
+        if (maintenanceRequest.getDescricaoDefeito().length() > 30) {
+            throw new MaintenanceUnprocessableException(
+                    "A descrição do equipamento não pode ter mais de 30 caracteres");
         }
 
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
@@ -57,7 +58,6 @@ public class MaintenanceService {
         maintenance.setData_finalizacao(null);
 
         maintenance.setCliente(authService.getCustomer());
-
 
         maintenance.setCategoria(categoryService.obterCategoriaPorNome(maintenanceRequest.getNomeCategoria()));
 
@@ -86,6 +86,15 @@ public class MaintenanceService {
         authService.checkAuth();
         List<Maintenance> maintenances = maintenanceRepository.findByCliente(authService.getCustomer());
         return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    public MaintenanceResponse getUserMaintenanceById(Long id) {
+        authService.checkAuth();
+        Maintenance maintenance = maintenanceRepository.findByIdAndCliente(id, authService.getCustomer())
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
+        
+        
+        return mapToResponse(maintenance);
     }
 
     public MaintenanceResponse updateMaintenance(Long id, MaintenanceRequest maintenanceRequest) {

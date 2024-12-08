@@ -78,6 +78,12 @@ public class BudgetService {
         return mapToResponse(updatedBudget);
     }
 
+    public BudgetResponse getBudgetByMaintenanceId(Long maintenanceId) {
+        Budget budget = budgetRepository.findByMaintenanceId(maintenanceId)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + maintenanceId));
+        return mapToResponse(budget);
+    }
+
     //Muda o estado do orcamento para rejeitado
     public void deleteBudget(Long id) {
         Budget budget = budgetRepository.findById(id)

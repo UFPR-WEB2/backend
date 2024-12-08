@@ -47,7 +47,7 @@ public class MaintenanceService {
                     "Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
         }
 
-        if(maintenance.getDescricao_equipamento().length() > 30)  {
+        if(maintenanceRequest.getDescricaoDefeito().length() > 30)  {
             throw new MaintenanceUnprocessableException("A descrição do equipamento não pode ter mais de 30 caracteres");
         }
 
@@ -79,6 +79,12 @@ public class MaintenanceService {
 
     public List<MaintenanceResponse> getAllMaintenances() {
         List<Maintenance> maintenances = maintenanceRepository.findAll();
+        return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
+    public List<MaintenanceResponse> getAllUserMaintenances() {
+        authService.checkAuth();
+        List<Maintenance> maintenances = maintenanceRepository.findByCliente(authService.getCustomer());
         return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 

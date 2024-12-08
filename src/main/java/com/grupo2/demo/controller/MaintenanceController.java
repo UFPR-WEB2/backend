@@ -19,6 +19,7 @@ import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.service.MaintenanceService;
 
+
 @RestController
 @RequestMapping("/api/manutencao")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -44,6 +45,11 @@ public class MaintenanceController {
         return maintenanceService.getAllMaintenances();
     }
 
+    @GetMapping("/records")
+    public List<MaintenanceResponse> getMethodName() {
+        return maintenanceService.getAllUserMaintenances();
+    }
+    
     @PutMapping("/{id}")
     public MaintenanceResponse atualizarManutencao(@PathVariable Long id,
             @RequestBody MaintenanceRequest maintenanceRequest) {

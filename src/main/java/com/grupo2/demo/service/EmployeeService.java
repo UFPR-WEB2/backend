@@ -33,23 +33,26 @@ public class EmployeeService {
     public EmployeeResponse createEmployee(EmployeeRequest employeeRequest) {
         authService.checkEmployeeAuth();
 
-        if(employeeRequest.getNome() == null || employeeRequest.getNome().isEmpty() ||
+        if (employeeRequest.getNome() == null || employeeRequest.getNome().isEmpty() ||
                 employeeRequest.getEmail() == null || employeeRequest.getEmail().isEmpty() ||
-                employeeRequest.getSenha() == null || employeeRequest.getSenha().isEmpty()  ||
+                employeeRequest.getSenha() == null || employeeRequest.getSenha().isEmpty() ||
                 employeeRequest.getDataNascimento() == null) {
-            throw new EmployeeNullException("Verifique se os campos estao preenchidos");
+            throw new EmployeeNullException("Verifique se os campos estão preenchidos.");
         }
 
         Employee employee = employeeRequest.toEmployee();
+
         String plainPassword = employeeRequest.getSenha();
         String salt = PasswordGenerator.generateSalt();
         String hashedPassword = PasswordGenerator.hashPassword(plainPassword, salt);
-        
+
         employee.setPassword(hashedPassword);
         employee.setSalt(salt);
         employee.setAtivo(true);
         employee.setDataNascimento(employeeRequest.getDataNascimento());
+
         Employee savedEmployee = employeeRepository.save(employee);
+
         return mapToResponse(savedEmployee);
     }
 
@@ -84,8 +87,8 @@ public class EmployeeService {
         // ADD: camada de validacao
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Funcionário não encontrado com id: " + id));
-        
-        if(employeeRequest.getSenha() != null && !employeeRequest.getSenha().isEmpty()) {
+
+        if (employeeRequest.getSenha() != null && !employeeRequest.getSenha().isEmpty()) {
             String plainPassword = employeeRequest.getSenha();
             String salt = PasswordGenerator.generateSalt();
             String hashedPassword = PasswordGenerator.hashPassword(plainPassword, salt);
@@ -129,7 +132,7 @@ public class EmployeeService {
         return response;
     }
 
-    //----------Metodos para ser utilizado em outras classes e servicos----------//
+    // ----------Metodos para ser utilizado em outras classes e servicos----------//
 
     public Employee getEmployeeById2(Long id) {
         Employee employee = employeeRepository.findById(id)

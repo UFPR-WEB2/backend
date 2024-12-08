@@ -36,7 +36,7 @@ public class Budget {
     private Boolean status;
 
     @ManyToOne
-    @JoinColumn(name = "id_manutencao", nullable = false)
+    @JoinColumn(name = "idManutencao", nullable = false)
     private Maintenance maintenance;
 
     public Long getId() {

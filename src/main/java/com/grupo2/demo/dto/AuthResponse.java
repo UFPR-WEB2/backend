@@ -5,7 +5,7 @@ import com.grupo2.demo.model.User.User;
 public class AuthResponse {
     private Long id;
     private String name;
-    private String emai;
+    private String email;
     private Boolean active;
     private String role;
 
@@ -27,7 +27,7 @@ public class AuthResponse {
     public void setUser(Object user) {
         User object = (User) user;
         this.name = object.getNome();
-        this.emai = object.getEmail();
+        this.email = object.getEmail();
         this.active = object.isAtivo();
     }
 
@@ -39,12 +39,12 @@ public class AuthResponse {
         this.name = name;
     }
 
-    public String getEmai() {
-        return emai;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmai(String emai) {
-        this.emai = emai;
+    public void setEmai(String email) {
+        this.email = email;
     }
 
     public Boolean getActive() {

@@ -62,4 +62,10 @@ public class BudgetController {
                 rejectRequest.getJustificativaRejeicao());
         return ResponseEntity.ok(budgetResponse);
     }
+
+    @GetMapping("/manutencao/{id}")
+    public ResponseEntity<BudgetResponse> obterOrcamentoPorManutencao(@PathVariable Long id) {
+        BudgetResponse budget = budgetService.getBudgetByMaintenanceId(id);
+        return ResponseEntity.ok(budget);
+    }
 }

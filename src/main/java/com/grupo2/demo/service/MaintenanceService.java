@@ -92,8 +92,7 @@ public class MaintenanceService {
         authService.checkAuth();
         Maintenance maintenance = maintenanceRepository.findByIdAndCliente(id, authService.getCustomer())
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
-        
-        
+
         return mapToResponse(maintenance);
     }
 
@@ -132,22 +131,6 @@ public class MaintenanceService {
         return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
-    public MaintenanceResponse finishMaintenance(Long id) {
-        authService.checkAuth();
-
-        Maintenance maintenance = maintenanceRepository.findById(id)
-                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
-
-        maintenance.setData_finalizacao(LocalDateTime.now());
-
-        Status status = statusRepository.findByNomeStatus(StatusEnum.FINALIZADA)
-                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
-        maintenance.setStatus(status);
-
-        Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
-        return mapToResponse(updatedMaintenance);
-    }
-
     public void deleteMaintenance(Long id) {
         authService.checkAuth();
         Maintenance maintenance = maintenanceRepository.findById(id)
@@ -176,24 +159,64 @@ public class MaintenanceService {
         updateMaintenance(id, maintenanceRequest);
     }
 
+    public MaintenanceResponse performMaintenance(Long id) {
+        authService.checkAuth();
+
+        Maintenance maintenance = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com o ID: " + id));
+
+        if (maintenance.getStatus().getNomeStatus() != StatusEnum.APROVADA &&
+                maintenance.getStatus().getNomeStatus() != StatusEnum.REDIRECIONADA) {
+            throw new RuntimeException(
+                    "A manutenção só pode ser realizada se o status for 'APROVADA' ou 'REDIRECIONADA'");
+        }
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.ARRUMADA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+
+        maintenance.setStatus(status);
+        Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
+
+        return mapToResponse(updatedMaintenance);
+    }
+
     public MaintenanceResponse payMaintenance(Long id) {
         authService.checkAuth();
 
         Maintenance maintenance = maintenanceRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com o ID: " + id));
 
-        if (maintenance.getStatus().getNomeStatus() == StatusEnum.PAGA) {
-            throw new IllegalStateException("Manutenção já está paga.");
+        if (maintenance.getStatus().getNomeStatus() != StatusEnum.ARRUMADA) {
+            throw new IllegalStateException("A manutenção só pode ser paga se o status for 'ARRUMADA'.");
         }
 
         Status status = statusRepository.findByNomeStatus(StatusEnum.PAGA)
                 .orElseThrow(() -> new RuntimeException("Status não encontrado"));
-        maintenance.setStatus(status);
 
+        maintenance.setStatus(status);
         Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
 
         return mapToResponse(updatedMaintenance);
     }
 
+    public MaintenanceResponse finishMaintenance(Long id) {
+        authService.checkAuth();
+
+        Maintenance maintenance = maintenanceRepository.findById(id)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + id));
+
+        if (maintenance.getStatus().getNomeStatus() != StatusEnum.PAGA) {
+            throw new IllegalStateException("A manutenção só pode ser paga se o status for 'PAGA'.");
+        }
+
+        maintenance.setData_finalizacao(LocalDateTime.now());
+
+        Status status = statusRepository.findByNomeStatus(StatusEnum.FINALIZADA)
+                .orElseThrow(() -> new RuntimeException("Status não encontrado"));
+        maintenance.setStatus(status);
+
+        Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
+        return mapToResponse(updatedMaintenance);
+    }
 
 }

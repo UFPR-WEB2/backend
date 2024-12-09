@@ -34,7 +34,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private BudgetRepository budgetRepository;
-    
 
     @Override
     public void run(String... args) throws Exception {
@@ -141,7 +140,6 @@ public class DataInitializer implements CommandLineRunner {
         maintenance3.setCategoria(category);
         maintenance3.setStatus(statusRepository.findByNomeStatus(StatusEnum.ABERTA).orElseThrow());
         maintenanceRepository.save(maintenance3);
-        
 
         System.out.println("Dados iniciais carregados com sucesso!");
     }

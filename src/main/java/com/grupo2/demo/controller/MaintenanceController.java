@@ -19,7 +19,6 @@ import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.service.MaintenanceService;
 
-
 @RestController
 @RequestMapping("/api/manutencao")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -68,24 +67,15 @@ public class MaintenanceController {
         return maintenanceService.updateMaintenance(id, maintenanceRequest);
     }
 
-    @PutMapping("finish/{id}")
-    public ResponseEntity<MaintenanceResponse> putMethodName(@PathVariable Long id) {
-
-        MaintenanceResponse entity = maintenanceService.finishMaintenance(id);
-        return ResponseEntity.ok(entity);
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarManutencao(@PathVariable Long id) {
         maintenanceService.deleteMaintenance(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/finish")
-    public ResponseEntity<MaintenanceResponse> postMethodName(@RequestBody MaintenanceRequest maintenanceRequest) {
-
-        MaintenanceResponse maintenanceResponse = maintenanceService.finishMaintenance(maintenanceRequest.getId());
-
+    @PutMapping("/perform/{id}")
+    public ResponseEntity<MaintenanceResponse> realizarManutencao(@PathVariable Long id) {
+        MaintenanceResponse maintenanceResponse = maintenanceService.performMaintenance(id);
         return ResponseEntity.ok(maintenanceResponse);
     }
 
@@ -93,6 +83,13 @@ public class MaintenanceController {
     public ResponseEntity<MaintenanceResponse> pagarManutencao(@PathVariable Long id) {
         MaintenanceResponse maintenanceResponse = maintenanceService.payMaintenance(id);
         return ResponseEntity.ok(maintenanceResponse);
+    }
+
+    @PutMapping("finish/{id}")
+    public ResponseEntity<MaintenanceResponse> putMethodName(@PathVariable Long id) {
+
+        MaintenanceResponse entity = maintenanceService.finishMaintenance(id);
+        return ResponseEntity.ok(entity);
     }
 
 }

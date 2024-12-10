@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.grupo2.demo.dto.BudgetRejectRequest;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
+import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.service.BudgetService;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class BudgetController {
     private BudgetService budgetService;
 
     @PostMapping
-    public ResponseEntity<BudgetResponse> criarOrcamento(@RequestBody BudgetRequest budgetRequest) {
-        BudgetResponse budgetResponse = budgetService.createBudget(budgetRequest);
+    public ResponseEntity<MaintenanceResponse> criarOrcamento(@RequestBody BudgetRequest budgetRequest) {
+        MaintenanceResponse budgetResponse = budgetService.createBudget(budgetRequest);
         return ResponseEntity.ok(budgetResponse);
     }
 

@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import com.grupo2.demo.config.StatusEnum;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
+import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.exception.BudgetNotFoundException;
 import com.grupo2.demo.exception.MaintenanceNotFoundException;
 import com.grupo2.demo.model.Maintenance.Budget;
 import com.grupo2.demo.model.Maintenance.Maintenance;
+import com.grupo2.demo.model.Maintenance.Status;
 import com.grupo2.demo.repository.BudgetRepository;
 import com.grupo2.demo.repository.MaintenanceRepository;
+import com.grupo2.demo.repository.StatusRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -35,24 +38,31 @@ public class BudgetService {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private StatusRepository statusRepository;
 
-    public BudgetResponse createBudget(BudgetRequest budgetRequest) {
+
+    public MaintenanceResponse createBudget(BudgetRequest budgetRequest) {
         Budget budget = new Budget();
-
         budget.setPrecoOrcado(budgetRequest.getPrecoOrcado());
         budget.setDataOrcamento(LocalDateTime.now());
         budget.setStatus(true);
-
+    
         Maintenance maintenance = maintenanceRepository.findById(budgetRequest.getMaintenanceId())
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada com id: " + budgetRequest.getMaintenanceId()));
+    
+        maintenance.setOrcamento(budget);
+        budgetRepository.save(budget);
 
-        budget.setMaintenance(maintenance);
+        Status status = statusRepository.findByNomeStatus(StatusEnum.ORCADA)
+                .orElseThrow(() -> new BudgetNotFoundException("Status não encontrado"));
 
-        maintenanceService.changeStateMaintenance(budgetRequest.getMaintenanceId(), StatusEnum.ORCADA);
+        maintenance.setStatus(status);
+        maintenanceRepository.save(maintenance);
+        
         maintenanceResponsibleService.startFirstBudget(authService.getEmployee().getId(), maintenance);
-
-        Budget savedBudget = budgetRepository.save(budget);
-        return mapToResponse(savedBudget);
+    
+        return maintenanceService.mapToResponse(maintenance);
     }
 
     public BudgetResponse getBudgetById(Long id) {
@@ -96,43 +106,54 @@ public class BudgetService {
     public BudgetResponse approveBudget(Long id) {
         Budget budget = budgetRepository.findByMaintenanceId(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
-
+    
         budget.setDataRecuperacao(LocalDateTime.now());
         budgetRepository.save(budget);
-
-        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.APROVADA);
-
+    
+        Maintenance maintenance = maintenanceRepository.findByOrcamento(budget)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Nenhuma manutenção associada a este orçamento"));
+    
+        maintenanceService.changeStateMaintenance(maintenance.getId(), StatusEnum.APROVADA);
+    
         return mapToResponse(budget);
     }
+    
 
     //Apos ser rejeitado somente muda estado nao mexe em mais nada
     public BudgetResponse rejectBudget(Long id, String justificativaRejeicao) {
         Budget budget = budgetRepository.findByMaintenanceId(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
-
+    
         budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
-
-        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.REJEITADA);
-
         budgetRepository.save(budget);
+    
+        Maintenance maintenance = maintenanceRepository.findByOrcamento(budget)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Nenhuma manutenção associada a este orçamento"));
+    
+        maintenanceService.changeStateMaintenance(maintenance.getId(), StatusEnum.REJEITADA);
+    
         return mapToResponse(budget);
     }
+    
 
     //Apos ser rejeitado e aprovado
     public BudgetResponse redeemBudget(Long id) {
         Budget budget = budgetRepository.findByMaintenanceId(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
-
-
+    
         budget.setStatus(true);
         budget.setDataRecuperacao(LocalDateTime.now());
-
-        maintenanceService.changeStateMaintenance(budget.getMaintenance().getId(), StatusEnum.APROVADA);
-
         budgetRepository.save(budget);
+    
+        Maintenance maintenance = maintenanceRepository.findByOrcamento(budget)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Nenhuma manutenção associada a este orçamento"));
+    
+        maintenanceService.changeStateMaintenance(maintenance.getId(), StatusEnum.APROVADA);
+    
         return mapToResponse(budget);
     }
+    
 
     private BudgetResponse mapToResponse(Budget budget) {
         BudgetResponse response = new BudgetResponse();

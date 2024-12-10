@@ -34,7 +34,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Autowired
     private BudgetRepository budgetRepository;
-    
 
     @Override
     public void run(String... args) throws Exception {
@@ -120,10 +119,10 @@ public class DataInitializer implements CommandLineRunner {
         budget.setPrecoOrcado(new BigDecimal("100.20"));
         budget.setDataOrcamento(LocalDateTime.now());
         budget.setStatus(true);
-        budget.setMaintenance(maintenance);
         budgetRepository.save(budget);
+        maintenance.setOrcamento(budget);
+        maintenanceRepository.save(maintenance);
 
-        // Create another 2 Maintenances in ABERTA status
         Maintenance maintenance2 = new Maintenance();
         maintenance2.setDescricao_equipamento("Notebook HP");
         maintenance2.setDescricao_defeito("Tela quebrada");
@@ -141,7 +140,6 @@ public class DataInitializer implements CommandLineRunner {
         maintenance3.setCategoria(category);
         maintenance3.setStatus(statusRepository.findByNomeStatus(StatusEnum.ABERTA).orElseThrow());
         maintenanceRepository.save(maintenance3);
-        
 
         System.out.println("Dados iniciais carregados com sucesso!");
     }

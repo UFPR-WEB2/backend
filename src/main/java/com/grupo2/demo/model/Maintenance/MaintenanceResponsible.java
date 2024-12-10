@@ -24,9 +24,8 @@ public class MaintenanceResponsible {
     private Employee funcionario;
 
     @ManyToOne
-    @JoinColumn(name = "id_manutencao", nullable = false)
-    private Maintenance manutencao;
-
+    @JoinColumn(name = "id_reparo", nullable = true)
+    private Repair reparo;
 
     public Long getId() {
         return id;
@@ -51,13 +50,13 @@ public class MaintenanceResponsible {
     public void setFuncionario(Employee funcionario) {
         this.funcionario = funcionario;
     }
-    
-    public Maintenance getManutencao() {
-        return manutencao;
+
+    public Repair getReparo() {
+        return reparo;
     }
 
-    public void setManutencao(Maintenance manutencao) {
-        this.manutencao = manutencao;
+    public void setReparo(Repair reparo) {
+        this.reparo = reparo;
     }
     
 }

@@ -8,6 +8,7 @@ import com.grupo2.demo.dto.RepairResponse;
 import com.grupo2.demo.exception.MaintenanceNotFoundException;
 import com.grupo2.demo.model.Maintenance.MaintenanceResponsible;
 import com.grupo2.demo.model.Maintenance.Repair;
+import com.grupo2.demo.repository.MaintenanceResponsibleRepository;
 import com.grupo2.demo.repository.RepairRepository;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public class RepairService {
     private RepairRepository repairRepository;
 
     @Autowired
+    private MaintenanceResponsibleRepository maintenanceResponsibleRepository;
+
+    @Autowired
     private AuthService authService;
 
     public RepairResponse createRepair(MaintenanceResponsible maintenanceResponsible, RepairRequest repairRequest) {
@@ -30,7 +34,9 @@ public class RepairService {
         repair.setData_conserto(repairRequest.getDataConserto());
         repair.setDescricao_conserto(repairRequest.getDescricaoConserto());
         repair.setOrientacao_cliente(repairRequest.getOrientacaoCliente());
-        repair.setResponsavelManutencao(maintenanceResponsible);
+
+        maintenanceResponsible.setReparo(repair);
+        maintenanceResponsibleRepository.save(maintenanceResponsible);
 
         Repair savedRepair = repairRepository.save(repair);
         return mapToResponse(savedRepair);

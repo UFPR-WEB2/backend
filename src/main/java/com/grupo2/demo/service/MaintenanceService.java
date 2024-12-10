@@ -155,20 +155,33 @@ public class MaintenanceService {
         maintenanceRepository.delete(maintenance);
     }
 
-    private MaintenanceResponse mapToResponse(Maintenance maintenance) {
+    public MaintenanceResponse mapToResponse(Maintenance maintenance) {
         MaintenanceResponse response = new MaintenanceResponse();
         response.setId(maintenance.getId());
         response.setDescricaoEquipamento(maintenance.getDescricao_equipamento());
         response.setDescricaoDefeito(maintenance.getDescricao_defeito());
         response.setDataCriacao(maintenance.getData_criacao());
         response.setDataFinalizacao(maintenance.getData_finalizacao());
-
         response.setNomeCategoria(maintenance.getCategoria().getNome_categoria());
         response.setNomeStatus(maintenance.getStatus().getNomeStatus());
         response.setNomeCliente(maintenance.getCliente().getNome());
+    
+        if (maintenance.getFuncionarioResponsavel() != null) {
 
+            if (maintenance.getFuncionarioResponsavel().getFuncionario() != null) {
+                response.setNomeFuncionario(maintenance.getFuncionarioResponsavel().getFuncionario().getNome());
+            }
+    
+            if (maintenance.getFuncionarioResponsavel().getReparo() != null) {
+                response.setDataConserto(maintenance.getFuncionarioResponsavel().getReparo().getData_conserto());
+                response.setDescricaoConserto(maintenance.getFuncionarioResponsavel().getReparo().getDescricao_conserto());
+                response.setOrientacaoCliente(maintenance.getFuncionarioResponsavel().getReparo().getOrientacao_cliente());
+            }
+        }
+    
         return response;
     }
+    
 
     public void changeStateMaintenance(Long id, StatusEnum status) {
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();

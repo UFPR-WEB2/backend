@@ -38,7 +38,7 @@ public class MaintenanceResponsibleService {
     @Autowired
     private AuthService authService;
 
-    //alem de encerrar cria um conserto para o responsavel
+    //Esta sem uso no momento, usar o do RepairService
     public MaintenanceResponse finishFix(Long id, RepairRequest repair) {
         authService.checkEmployeeAuth();
     

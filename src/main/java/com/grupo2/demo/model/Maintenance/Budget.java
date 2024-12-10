@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Budget {
@@ -34,10 +32,6 @@ public class Budget {
 
     @Column(nullable = false)
     private Boolean status;
-
-    @ManyToOne
-    @JoinColumn(name = "idManutencao", nullable = false)
-    private Maintenance maintenance;
 
     public Long getId() {
         return id;
@@ -93,14 +87,6 @@ public class Budget {
 
     public void setStatus(Boolean status) {
         this.status = status;
-    }
-
-    public Maintenance getMaintenance() {
-        return maintenance;
-    }
-
-    public void setMaintenance(Maintenance maintenance) {
-        this.maintenance = maintenance;
     }
 
 }

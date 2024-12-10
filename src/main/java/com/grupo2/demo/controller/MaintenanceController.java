@@ -62,6 +62,13 @@ public class MaintenanceController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/finalizadas")
+    public ResponseEntity<List<MaintenanceResponse>> manutencoesFinalizadas() {
+        List<MaintenanceResponse> response = maintenanceService.getAllFinishedMaintenances();
+
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping("/{id}")
     public MaintenanceResponse atualizarManutencao(@PathVariable Long id,
             @RequestBody MaintenanceRequest maintenanceRequest) {

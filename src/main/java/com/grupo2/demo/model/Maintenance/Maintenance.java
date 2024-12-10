@@ -42,6 +42,14 @@ public class Maintenance {
     @JoinColumn(name = "id_status", nullable = false)
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "id_orcamento", nullable = true)
+    private Budget orcamento;
+
+    @ManyToOne
+    @JoinColumn(name = "id_funcionarioResponsavel", nullable = true)
+    private MaintenanceResponsible funcionarioResponsavel;
+
     public Long getId() {
         return id;
     }
@@ -105,5 +113,23 @@ public class Maintenance {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Budget getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(Budget orcamento) {
+        this.orcamento = orcamento;
+    }
+
+    public MaintenanceResponsible getFuncionarioResponsavel() {
+        return funcionarioResponsavel;
+    }
+
+    public void setFuncionarioResponsavel(MaintenanceResponsible funcionarioResponsavel) {
+        this.funcionarioResponsavel = funcionarioResponsavel;
+    }
+
+    
 
 }

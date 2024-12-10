@@ -3,6 +3,7 @@ package com.grupo2.demo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.grupo2.demo.repository.MaintenanceRepository;
 import com.grupo2.demo.repository.MaintenanceResponsibleRepository;
 import com.grupo2.demo.config.StatusEnum;
 import com.grupo2.demo.dto.MaintenanceResponse;
@@ -32,36 +33,41 @@ public class MaintenanceResponsibleService {
     private MaintenanceService maintenanceService;
 
     @Autowired
+    private MaintenanceRepository maintenanceRepository;;
+
+    @Autowired
     private AuthService authService;
 
-    //alem de encerrar cria um conserto para o responsavel
+    //Esta sem uso no momento, usar o do RepairService
     public MaintenanceResponse finishFix(Long id, RepairRequest repair) {
         authService.checkEmployeeAuth();
-
+    
         MaintenanceResponsible maintenanceResponsible = maintenanceResponsibleRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Responsável pela manutenção não encontrado com id: " + id));
-
+    
         maintenanceResponsible.setStatus(true);
-
         maintenanceResponsibleRepository.save(maintenanceResponsible);
-
-        RepairResponse repairResponse = repairService.createRepair(maintenanceResponsible, repair);
-
+    
+        // Buscar a Maintenance associada
+        Maintenance maintenance = maintenanceRepository.findByFuncionarioResponsavel(maintenanceResponsible)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada para o responsável com id: " + id));
+    
+        RepairResponse repairResponse = repairService.createRepair(repair);
+    
         MaintenanceResponse maintenanceResponse = new MaintenanceResponse();
-        maintenanceResponse.setId(maintenanceResponsible.getManutencao().getId());
-        maintenanceResponse.setDescricaoEquipamento(maintenanceResponsible.getManutencao().getDescricao_equipamento());
-        maintenanceResponse.setDescricaoDefeito(maintenanceResponsible.getManutencao().getDescricao_defeito());
-        maintenanceResponse.setNomeCategoria(maintenanceResponsible.getManutencao().getCategoria().getNome_categoria().toString());
-        maintenanceResponse.setDataCriacao(maintenanceResponsible.getManutencao().getData_criacao());
-        maintenanceResponse.setDataFinalizacao(maintenanceResponsible.getManutencao().getData_finalizacao());
-        maintenanceResponse.setNomeCliente(maintenanceResponsible.getManutencao().getCliente().getNome());
-        maintenanceResponse.setNomeStatus(maintenanceResponsible.getManutencao().getStatus().getNomeStatus());
+        maintenanceResponse.setId(maintenance.getId());
+        maintenanceResponse.setDescricaoEquipamento(maintenance.getDescricao_equipamento());
+        maintenanceResponse.setDescricaoDefeito(maintenance.getDescricao_defeito());
+        maintenanceResponse.setNomeCategoria(maintenance.getCategoria().getNome_categoria().toString());
+        maintenanceResponse.setDataCriacao(maintenance.getData_criacao());
+        maintenanceResponse.setDataFinalizacao(maintenance.getData_finalizacao());
+        maintenanceResponse.setNomeCliente(maintenance.getCliente().getNome());
+        maintenanceResponse.setNomeStatus(maintenance.getStatus().getNomeStatus());
         maintenanceResponse.setOrientacaoCliente(repairResponse.getOrientacaoCliente());
         maintenanceResponse.setDescricaoConserto(repairResponse.getDescricaoConserto());
         maintenanceResponse.setDataConserto(repairResponse.getDataConserto());
-
+    
         return maintenanceResponse;
-
     }
 
     public MaintenanceResponsible redirectResponsible(Long id, Long idFuncionario) {
@@ -71,8 +77,11 @@ public class MaintenanceResponsibleService {
 
         Employee actualEmployee = maintenanceResponsible.getFuncionario();
 
+        Maintenance maintenance = maintenanceRepository.findByFuncionarioResponsavel(maintenanceResponsible)
+        .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada para o responsável com id: " + id));
+
         logResponsibleService.createLogResponsible(maintenanceResponsible, actualEmployee);
-        maintenanceService.changeStateMaintenance(maintenanceResponsible.getManutencao().getId(), StatusEnum.REDIRECIONADA);
+        maintenanceService.changeStateMaintenance(maintenance.getId(), StatusEnum.REDIRECIONADA);
 
         Employee employee = employeeService.getEmployeeById2(idFuncionario);
         maintenanceResponsible.setFuncionario(employee);
@@ -84,14 +93,16 @@ public class MaintenanceResponsibleService {
     public void startFirstBudget(Long id, Maintenance maintenance) {
 
         MaintenanceResponsible maintenanceResponsible = new MaintenanceResponsible();
-        
         Employee employee = employeeService.getEmployeeById2(id);
-
+    
         maintenanceResponsible.setFuncionario(employee);
         maintenanceResponsible.setStatus(false);
-        maintenanceResponsible.setManutencao(maintenance);
     
-        maintenanceResponsibleRepository.save(maintenanceResponsible);
+        maintenanceResponsible = maintenanceResponsibleRepository.save(maintenanceResponsible);
+    
+        maintenance.setFuncionarioResponsavel(maintenanceResponsible);
+        maintenanceRepository.save(maintenance);
     }
+    
 
 }

@@ -1,22 +1,23 @@
 package com.grupo2.demo.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.grupo2.demo.config.StatusEnum;
 import com.grupo2.demo.dto.MaintenanceRequest;
 import com.grupo2.demo.dto.MaintenanceResponse;
 import com.grupo2.demo.exception.MaintenanceNotFoundException;
 import com.grupo2.demo.exception.MaintenanceNullException;
 import com.grupo2.demo.exception.MaintenanceUnprocessableException;
-import com.grupo2.demo.model.Maintenance.Maintenance;
-import com.grupo2.demo.repository.MaintenanceRepository;
-import java.util.List;
 import com.grupo2.demo.model.Maintenance.Category;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
-
-import com.grupo2.demo.repository.StatusRepository;
-import com.grupo2.demo.config.StatusEnum;
+import com.grupo2.demo.model.Maintenance.Maintenance;
 import com.grupo2.demo.model.Maintenance.Status;
+import com.grupo2.demo.repository.MaintenanceRepository;
+import com.grupo2.demo.repository.StatusRepository;
 
 @Service
 public class MaintenanceService {
@@ -47,9 +48,14 @@ public class MaintenanceService {
                     "Verifique se os campos de descrição do equipamento e defeito estão preenchidos");
         }
 
-        if (maintenanceRequest.getDescricaoDefeito().length() > 30) {
+        if (maintenanceRequest.getDescricaoEquipamento().length() > 30) {
             throw new MaintenanceUnprocessableException(
                     "A descrição do equipamento não pode ter mais de 30 caracteres");
+        }
+
+        if (maintenanceRequest.getDescricaoDefeito().length() > 200) {
+            throw new MaintenanceUnprocessableException(
+                    "A descrição do equipamento não pode ter mais de 200 caracteres");
         }
 
         maintenance.setDescricao_equipamento(maintenanceRequest.getDescricaoEquipamento());
@@ -132,6 +138,11 @@ public class MaintenanceService {
         return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
+    public List<MaintenanceResponse> getAllFinishedMaintenances() {
+        List<Maintenance> maintenances = maintenanceRepository.findByStatusNomeStatus(StatusEnum.FINALIZADA);
+        return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public MaintenanceResponse finishMaintenance(Long id) {
         authService.checkAuth();
 
@@ -155,20 +166,36 @@ public class MaintenanceService {
         maintenanceRepository.delete(maintenance);
     }
 
-    private MaintenanceResponse mapToResponse(Maintenance maintenance) {
+    public MaintenanceResponse mapToResponse(Maintenance maintenance) {
         MaintenanceResponse response = new MaintenanceResponse();
         response.setId(maintenance.getId());
         response.setDescricaoEquipamento(maintenance.getDescricao_equipamento());
         response.setDescricaoDefeito(maintenance.getDescricao_defeito());
         response.setDataCriacao(maintenance.getData_criacao());
         response.setDataFinalizacao(maintenance.getData_finalizacao());
-
         response.setNomeCategoria(maintenance.getCategoria().getNome_categoria());
         response.setNomeStatus(maintenance.getStatus().getNomeStatus());
         response.setNomeCliente(maintenance.getCliente().getNome());
-
+        response.setEmailCliente(maintenance.getCliente().getEmail());
+        
+        if(maintenance.getOrcamento() != null) {
+            response.setValorConserto(maintenance.getOrcamento().getPrecoOrcado());
+        }
+    
+        if (maintenance.getFuncionarioResponsavel() != null) {
+            if (maintenance.getFuncionarioResponsavel().getFuncionario() != null) {
+                response.setNomeFuncionario(maintenance.getFuncionarioResponsavel().getFuncionario().getNome());
+                if (maintenance.getFuncionarioResponsavel().getReparo() != null) {
+                    response.setDataConserto(maintenance.getFuncionarioResponsavel().getReparo().getData_conserto());
+                    response.setDescricaoConserto(maintenance.getFuncionarioResponsavel().getReparo().getDescricao_conserto());
+                    response.setOrientacaoCliente(maintenance.getFuncionarioResponsavel().getReparo().getOrientacao_cliente());
+                }
+            }
+        }
+    
         return response;
     }
+    
 
     public void changeStateMaintenance(Long id, StatusEnum status) {
         MaintenanceRequest maintenanceRequest = new MaintenanceRequest();

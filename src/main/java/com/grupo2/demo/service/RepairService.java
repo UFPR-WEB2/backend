@@ -1,5 +1,9 @@
 package com.grupo2.demo.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +19,6 @@ import com.grupo2.demo.repository.MaintenanceRepository;
 import com.grupo2.demo.repository.MaintenanceResponsibleRepository;
 import com.grupo2.demo.repository.RepairRepository;
 import com.grupo2.demo.repository.StatusRepository;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RepairService {
@@ -42,9 +43,9 @@ public class RepairService {
 
         Repair repair = new Repair();
 
-        repair.setData_conserto(repairRequest.getDataConserto());
         repair.setDescricao_conserto(repairRequest.getDescricaoConserto());
         repair.setOrientacao_cliente(repairRequest.getOrientacaoCliente());
+        repair.setData_conserto(LocalDateTime.now());
 
         Long idMaintenance = repairRequest.getIdManutencao();
         MaintenanceResponsible maintenanceResponsible = maintenanceRepository.findById(idMaintenance)

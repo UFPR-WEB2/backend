@@ -4,6 +4,7 @@ package com.grupo2.demo.dto;
 import java.time.LocalDateTime;
 
 public class RepairRequest {
+    private Long idManutencao;
     private LocalDateTime dataConserto;
     private String descricaoConserto;
     private String orientacaoCliente;
@@ -39,5 +40,13 @@ public class RepairRequest {
 
     public void setOrientacaoCliente(String orientacaoCliente) {
         this.orientacaoCliente = orientacaoCliente;
+    }
+
+    public Long getIdManutencao() {
+        return idManutencao;
+    }
+
+    public void setIdManutencao(Long idManutencao) {
+        this.idManutencao = idManutencao;
     }
 }

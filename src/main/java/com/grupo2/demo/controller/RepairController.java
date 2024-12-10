@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 @RequestMapping("/api/repair")
@@ -28,6 +31,13 @@ public class RepairController {
     public List<RepairResponse> getAllRepairs() {
         return repairService.getAllRepairs();
     }
+
+    @PostMapping()
+    public ResponseEntity<RepairResponse> createRepair(@RequestBody RepairRequest repairRequest) { 
+        RepairResponse repair = repairService.createRepair(repairRequest);
+        return ResponseEntity.ok(repair);
+    }
+    
 
     @PutMapping("/{id}")
     public RepairResponse updateRepair(@PathVariable Long id, @RequestBody RepairRequest repairRequest) {

@@ -111,7 +111,7 @@ public class DataInitializer implements CommandLineRunner {
         maintenance.setData_criacao(LocalDateTime.now());
         maintenance.setCliente(customer);
         maintenance.setCategoria(category);
-        maintenance.setStatus(statusRepository.findByNomeStatus(StatusEnum.REJEITADA).orElseThrow());
+        maintenance.setStatus(statusRepository.findByNomeStatus(StatusEnum.APROVADA).orElseThrow());
         maintenanceRepository.save(maintenance);
 
         // Create Budget for Maintenance

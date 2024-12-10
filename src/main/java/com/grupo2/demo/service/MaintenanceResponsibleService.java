@@ -52,7 +52,7 @@ public class MaintenanceResponsibleService {
         Maintenance maintenance = maintenanceRepository.findByFuncionarioResponsavel(maintenanceResponsible)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Manutenção não encontrada para o responsável com id: " + id));
     
-        RepairResponse repairResponse = repairService.createRepair(maintenanceResponsible, repair);
+        RepairResponse repairResponse = repairService.createRepair(repair);
     
         MaintenanceResponse maintenanceResponse = new MaintenanceResponse();
         maintenanceResponse.setId(maintenance.getId());

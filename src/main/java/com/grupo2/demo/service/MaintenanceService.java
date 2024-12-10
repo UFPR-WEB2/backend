@@ -138,6 +138,11 @@ public class MaintenanceService {
         return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
     }
 
+    public List<MaintenanceResponse> getAllFinishedMaintenances() {
+        List<Maintenance> maintenances = maintenanceRepository.findByStatusNomeStatus(StatusEnum.FINALIZADA);
+        return maintenances.stream().map(this::mapToResponse).collect(Collectors.toList());
+    }
+
     public MaintenanceResponse finishMaintenance(Long id) {
         authService.checkAuth();
 
@@ -171,17 +176,24 @@ public class MaintenanceService {
         response.setNomeCategoria(maintenance.getCategoria().getNome_categoria());
         response.setNomeStatus(maintenance.getStatus().getNomeStatus());
         response.setNomeCliente(maintenance.getCliente().getNome());
+
+        System.out.println("Estou Aqui");
+        
+        if(maintenance.getOrcamento() != null) {
+            response.setValorConserto(maintenance.getOrcamento().getPrecoOrcado());
+        }
     
         if (maintenance.getFuncionarioResponsavel() != null) {
-
+            System.out.println("Estou Aqui 2");
             if (maintenance.getFuncionarioResponsavel().getFuncionario() != null) {
                 response.setNomeFuncionario(maintenance.getFuncionarioResponsavel().getFuncionario().getNome());
-            }
-    
-            if (maintenance.getFuncionarioResponsavel().getReparo() != null) {
-                response.setDataConserto(maintenance.getFuncionarioResponsavel().getReparo().getData_conserto());
-                response.setDescricaoConserto(maintenance.getFuncionarioResponsavel().getReparo().getDescricao_conserto());
-                response.setOrientacaoCliente(maintenance.getFuncionarioResponsavel().getReparo().getOrientacao_cliente());
+                System.out.println("Estou Aqui 3");
+                if (maintenance.getFuncionarioResponsavel().getReparo() != null) {
+                    System.out.println("Estou Aqui 4");
+                    response.setDataConserto(maintenance.getFuncionarioResponsavel().getReparo().getData_conserto());
+                    response.setDescricaoConserto(maintenance.getFuncionarioResponsavel().getReparo().getDescricao_conserto());
+                    response.setOrientacaoCliente(maintenance.getFuncionarioResponsavel().getReparo().getOrientacao_cliente());
+                }
             }
         }
     

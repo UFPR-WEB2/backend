@@ -2,6 +2,7 @@ package com.grupo2.demo.dto;
 
 
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.grupo2.demo.config.StatusEnum;
@@ -19,6 +20,7 @@ public class MaintenanceResponse {
     private String nomeFuncionario;
     private String descricaoConserto;
     private String orientacaoCliente;
+    private BigDecimal valorConserto;
 
     // Getters e Setters
     public Long getId() {
@@ -115,6 +117,14 @@ public class MaintenanceResponse {
 
     public void setDataConserto(LocalDateTime dataConserto) {
         this.dataConserto = dataConserto;
+    }
+
+    public BigDecimal getValorConserto() {
+        return valorConserto;
+    }
+
+    public void setValorConserto(BigDecimal valorConserto) {
+        this.valorConserto = valorConserto;
     }
     
 }

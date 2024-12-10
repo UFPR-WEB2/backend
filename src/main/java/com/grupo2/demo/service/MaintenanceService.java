@@ -193,6 +193,7 @@ public class MaintenanceService {
         Status status = statusRepository.findByNomeStatus(StatusEnum.PAGA)
                 .orElseThrow(() -> new RuntimeException("Status não encontrado"));
 
+        maintenance.setDataPagamento(LocalDateTime.now());
         maintenance.setStatus(status);
         Maintenance updatedMaintenance = maintenanceRepository.save(maintenance);
 

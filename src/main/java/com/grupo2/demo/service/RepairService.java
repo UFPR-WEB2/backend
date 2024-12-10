@@ -36,10 +36,9 @@ public class RepairService {
         return mapToResponse(savedRepair);
     }
 
-    public RepairResponse getRepairById(Long id) {
-        Repair repair = repairRepository.findById(id)
+    public Repair getRepairById(Long id) {
+        return repairRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Reparo não encontrado com id: " + id));
-        return mapToResponse(repair);
     }
 
     public List<RepairResponse> getAllRepairs() {
@@ -52,7 +51,7 @@ public class RepairService {
 
         Repair repair = repairRepository.findById(id)
                 .orElseThrow(() -> new MaintenanceNotFoundException("Reparo não encontrado com id: " + id));
-            
+
         repair.setData_conserto(repairRequest.getDataConserto());
         repair.setDescricao_conserto(repairRequest.getDescricaoConserto());
         repair.setOrientacao_cliente(repairRequest.getOrientacaoCliente());
@@ -76,5 +75,11 @@ public class RepairService {
         response.setDescricaoConserto(repair.getDescricao_conserto());
         response.setOrientacaoCliente(repair.getOrientacao_cliente());
         return response;
+    }
+
+    public Repair getByMaintenanceResponsibleId(Long id) {
+        return repairRepository.findByResponsavelManutencaoId(id)
+                .orElseThrow(
+                        () -> new MaintenanceNotFoundException("Reparo não encontrado com id do responsável: " + id));
     }
 }

@@ -27,7 +27,6 @@ public class MaintenanceResponsible {
     @JoinColumn(name = "id_manutencao", nullable = false)
     private Maintenance manutencao;
 
-
     public Long getId() {
         return id;
     }
@@ -51,7 +50,7 @@ public class MaintenanceResponsible {
     public void setFuncionario(Employee funcionario) {
         this.funcionario = funcionario;
     }
-    
+
     public Maintenance getManutencao() {
         return manutencao;
     }
@@ -59,5 +58,5 @@ public class MaintenanceResponsible {
     public void setManutencao(Maintenance manutencao) {
         this.manutencao = manutencao;
     }
-    
+
 }

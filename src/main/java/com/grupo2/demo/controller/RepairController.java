@@ -2,6 +2,7 @@ package com.grupo2.demo.controller;
 
 import com.grupo2.demo.dto.RepairRequest;
 import com.grupo2.demo.dto.RepairResponse;
+import com.grupo2.demo.model.Maintenance.Repair;
 import com.grupo2.demo.service.RepairService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,15 @@ public class RepairController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RepairResponse> getRepairById(@PathVariable Long id) {
-        RepairResponse repair = repairService.getRepairById(id);
-        return ResponseEntity.ok(repair);
+        Repair repair = repairService.getRepairById(id);
+
+        RepairResponse repairResponse = new RepairResponse();
+        repairResponse.setId(repair.getId());
+        repairResponse.setDataConserto(repair.getData_conserto());
+        repairResponse.setDescricaoConserto(repair.getDescricao_conserto());
+        repairResponse.setOrientacaoCliente(repair.getOrientacao_cliente());
+
+        return ResponseEntity.ok(repairResponse);
     }
 
     @GetMapping

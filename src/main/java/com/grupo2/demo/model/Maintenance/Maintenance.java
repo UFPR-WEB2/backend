@@ -30,6 +30,9 @@ public class Maintenance {
     @Column(nullable = true)
     private LocalDateTime data_finalizacao;
 
+    @Column(nullable = true)
+    private LocalDateTime dataPagamento;
+
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Customer cliente;
@@ -80,6 +83,14 @@ public class Maintenance {
 
     public void setData_finalizacao(LocalDateTime data_finalizacao) {
         this.data_finalizacao = data_finalizacao;
+    }
+
+    public LocalDateTime getDataPagamento() {
+        return dataPagamento;
+    }
+
+    public void setDataPagamento(LocalDateTime dataPagamento) {
+        this.dataPagamento = dataPagamento;
     }
 
     public Customer getCliente() {

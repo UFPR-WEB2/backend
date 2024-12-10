@@ -34,12 +34,13 @@ public class MaintenanceResponsibleService {
     @Autowired
     private AuthService authService;
 
-    //alem de encerrar cria um conserto para o responsavel
+    // alem de encerrar cria um conserto para o responsavel
     public MaintenanceResponse finishFix(Long id, RepairRequest repair) {
         authService.checkEmployeeAuth();
 
         MaintenanceResponsible maintenanceResponsible = maintenanceResponsibleRepository.findById(id)
-                .orElseThrow(() -> new MaintenanceNotFoundException("Responsável pela manutenção não encontrado com id: " + id));
+                .orElseThrow(() -> new MaintenanceNotFoundException(
+                        "Responsável pela manutenção não encontrado com id: " + id));
 
         maintenanceResponsible.setStatus(true);
 
@@ -51,7 +52,8 @@ public class MaintenanceResponsibleService {
         maintenanceResponse.setId(maintenanceResponsible.getManutencao().getId());
         maintenanceResponse.setDescricaoEquipamento(maintenanceResponsible.getManutencao().getDescricao_equipamento());
         maintenanceResponse.setDescricaoDefeito(maintenanceResponsible.getManutencao().getDescricao_defeito());
-        maintenanceResponse.setNomeCategoria(maintenanceResponsible.getManutencao().getCategoria().getNome_categoria().toString());
+        maintenanceResponse
+                .setNomeCategoria(maintenanceResponsible.getManutencao().getCategoria().getNome_categoria().toString());
         maintenanceResponse.setDataCriacao(maintenanceResponsible.getManutencao().getData_criacao());
         maintenanceResponse.setDataFinalizacao(maintenanceResponsible.getManutencao().getData_finalizacao());
         maintenanceResponse.setNomeCliente(maintenanceResponsible.getManutencao().getCliente().getNome());
@@ -67,12 +69,14 @@ public class MaintenanceResponsibleService {
     public MaintenanceResponsible redirectResponsible(Long id, Long idFuncionario) {
         authService.checkEmployeeAuth();
         MaintenanceResponsible maintenanceResponsible = maintenanceResponsibleRepository.findById(id)
-                .orElseThrow(() -> new MaintenanceNotFoundException("Responsável pela manutenção não encontrado com id: " + id));
+                .orElseThrow(() -> new MaintenanceNotFoundException(
+                        "Responsável pela manutenção não encontrado com id: " + id));
 
         Employee actualEmployee = maintenanceResponsible.getFuncionario();
 
         logResponsibleService.createLogResponsible(maintenanceResponsible, actualEmployee);
-        maintenanceService.changeStateMaintenance(maintenanceResponsible.getManutencao().getId(), StatusEnum.REDIRECIONADA);
+        maintenanceService.changeStateMaintenance(maintenanceResponsible.getManutencao().getId(),
+                StatusEnum.REDIRECIONADA);
 
         Employee employee = employeeService.getEmployeeById2(idFuncionario);
         maintenanceResponsible.setFuncionario(employee);
@@ -80,18 +84,26 @@ public class MaintenanceResponsibleService {
         return maintenanceResponsibleRepository.save(maintenanceResponsible);
     }
 
-    //-----------Metodos para serem utilizados em outras classes e servicos-----------//
+    // -----------Metodos para serem utilizados em outras classes e
+    // servicos-----------//
     public void startFirstBudget(Long id, Maintenance maintenance) {
 
         MaintenanceResponsible maintenanceResponsible = new MaintenanceResponsible();
-        
+
         Employee employee = employeeService.getEmployeeById2(id);
 
         maintenanceResponsible.setFuncionario(employee);
         maintenanceResponsible.setStatus(false);
         maintenanceResponsible.setManutencao(maintenance);
-    
+
         maintenanceResponsibleRepository.save(maintenanceResponsible);
+    }
+
+    public MaintenanceResponsible getByMaintenanceId(Long id) {
+        return maintenanceResponsibleRepository.findByManutencaoId(id)
+                .orElseThrow(() -> new MaintenanceNotFoundException("Responsável pela manutenção não encontrado com id: " + id));
+                
+
     }
 
 }

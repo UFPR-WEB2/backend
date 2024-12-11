@@ -40,8 +40,14 @@ public class CategoryService {
             throw new CategoryNullException("Verifique se o campo de nome da categoria está preenchido");
         }
 
-        if(categoryRepository.findByNomeCategoria(categoryRequest.getNomeCategoria()) != null) {
-            throw new CategoryConflitException("Categoria já existe!");
+        Category categoryView = categoryRepository.findByNomeCategoria(categoryRequest.getNomeCategoria());
+        if(categoryView != null) {
+            if(categoryView.getAtivo()) {
+                throw new CategoryConflitException("Categoria já existe!");
+            }
+            categoryView.setAtivo(true);
+            Category savedCategory = categoryRepository.save(categoryView);
+            return mapToResponse(savedCategory);
         }
 
         Category category = new Category();

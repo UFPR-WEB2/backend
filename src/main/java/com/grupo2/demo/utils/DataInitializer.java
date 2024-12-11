@@ -1,18 +1,23 @@
 package com.grupo2.demo.utils;
 
-import com.grupo2.demo.model.Maintenance.*;
-import com.grupo2.demo.config.StatusEnum;
-import com.grupo2.demo.model.User.Customer;
-import com.grupo2.demo.model.User.Employee;
-import com.grupo2.demo.repository.*;
+import java.time.LocalDate;
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import com.grupo2.demo.config.StatusEnum;
+import com.grupo2.demo.model.Maintenance.Category;
+import com.grupo2.demo.model.Maintenance.Status;
+import com.grupo2.demo.model.User.Customer;
+import com.grupo2.demo.model.User.Employee;
+import com.grupo2.demo.repository.BudgetRepository;
+import com.grupo2.demo.repository.CategoryRepository;
+import com.grupo2.demo.repository.CustomerRepository;
+import com.grupo2.demo.repository.EmployeeRepository;
+import com.grupo2.demo.repository.MaintenanceRepository;
+import com.grupo2.demo.repository.StatusRepository;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -103,7 +108,7 @@ public class DataInitializer implements CommandLineRunner {
             category.setAtivo(true);
             categoryRepository.save(category);
         }
-
+        /* 
         // Create Maintenance
         Maintenance maintenance = new Maintenance();
         maintenance.setDescricao_equipamento("Notebook Dell");
@@ -142,5 +147,6 @@ public class DataInitializer implements CommandLineRunner {
         maintenanceRepository.save(maintenance3);
 
         System.out.println("Dados iniciais carregados com sucesso!");
+        */
     }
 }

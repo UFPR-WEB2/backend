@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.grupo2.demo.dto.BudgetRejectRequest;
 import com.grupo2.demo.dto.BudgetRequest;
 import com.grupo2.demo.dto.BudgetResponse;
 import com.grupo2.demo.dto.MaintenanceResponse;
@@ -60,8 +59,8 @@ public class BudgetController {
     }
 
     @PutMapping("/rejeitar/{id}")
-    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@PathVariable Long id, @RequestBody BudgetRejectRequest rejectRequest) {
-        BudgetResponse budgetResponse = budgetService.rejectBudget(id, rejectRequest.getJustificativaRejeicao());
+    public ResponseEntity<BudgetResponse> rejeitarOrcamento(@PathVariable Long id) {
+        BudgetResponse budgetResponse = budgetService.rejectBudget(id);
         return ResponseEntity.ok(budgetResponse);
     }
 

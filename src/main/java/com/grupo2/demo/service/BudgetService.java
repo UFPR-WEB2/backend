@@ -120,11 +120,10 @@ public class BudgetService {
     
 
     //Apos ser rejeitado somente muda estado nao mexe em mais nada
-    public BudgetResponse rejectBudget(Long id, String justificativaRejeicao) {
+    public BudgetResponse rejectBudget(Long id) {
         Budget budget = budgetRepository.findByMaintenanceId(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
     
-        budget.setJustificativaRejeicao(justificativaRejeicao);
         budget.setDataRejeicao(LocalDateTime.now());
         budgetRepository.save(budget);
     

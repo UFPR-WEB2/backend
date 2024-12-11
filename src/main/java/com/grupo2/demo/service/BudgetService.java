@@ -77,8 +77,8 @@ public class BudgetService {
     }
 
     public BudgetResponse updateBudget(Long id, BudgetRequest budgetRequest) {
-        Budget budget = budgetRepository.findById(id)
-                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id: " + id));
+        Budget budget = budgetRepository.findByMaintenanceId(id)
+                .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado com id da manutencao: " + id));
 
         if (budgetRequest.getPrecoOrcado() != null) {
             budget.setPrecoOrcado(budgetRequest.getPrecoOrcado());

@@ -1,5 +1,9 @@
 package com.grupo2.demo.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +19,6 @@ import com.grupo2.demo.model.Maintenance.Status;
 import com.grupo2.demo.repository.BudgetRepository;
 import com.grupo2.demo.repository.MaintenanceRepository;
 import com.grupo2.demo.repository.StatusRepository;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BudgetService {
@@ -121,7 +121,7 @@ public class BudgetService {
 
     //Apos ser rejeitado somente muda estado nao mexe em mais nada
     public BudgetResponse rejectBudget(Long id, String justificativaRejeicao) {
-        Budget budget = budgetRepository.findByMaintenanceId(id)
+        Budget budget = budgetRepository.findById(id)
                 .orElseThrow(() -> new BudgetNotFoundException("Orçamento não encontrado para a manutenção com id: " + id));
     
         budget.setJustificativaRejeicao(justificativaRejeicao);
